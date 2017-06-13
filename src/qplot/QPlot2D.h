@@ -1,7 +1,7 @@
 #pragma once
 
 #include "QPlot.h"
-#include "histogram.h"
+#include "QHist.h"
 
 namespace QPlot
 {
