@@ -3,6 +3,9 @@
 #include <list>
 #include <map>
 
+namespace QPlot
+{
+
 struct c2d
 {
   c2d(uint32_t xx, uint32_t yy)
@@ -68,4 +71,6 @@ inline HistMap1D to_map(const HistList1D &list)
   for (auto m : list)
     ret[m.first] = m.second;
   return ret;
+}
+
 }
