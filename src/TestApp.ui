@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TestApp</class>
+ <widget class="QMainWindow" name="TestApp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1582</width>
+    <height>913</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TestApp</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>18</width>
+    <height>18</height>
+   </size>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPlot::Multi1D" name="plot1d" native="true"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPlot::Plot2D" name="plot2d" native="true"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QPlot::Multi1D</class>
+   <extends>QWidget</extends>
+   <header>QPlot1D.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QPlot::Plot2D</class>
+   <extends>QWidget</extends>
+   <header>QPlot2D.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
