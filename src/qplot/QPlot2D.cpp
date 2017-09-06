@@ -1,5 +1,7 @@
 #include "QPlot2D.h"
 
+#include "custom_logger.h"
+
 namespace QPlot
 {
 
@@ -238,47 +240,63 @@ void Plot2D::plotLabels()
 }
 
 
-void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey, const HistMap2D &spectrum_data)
+void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey,
+                        const HistMap2D &spectrum_data)
 {
-  colorMap->data()->clear();
-  setAlwaysSquare(sizex == sizey);
-  if (sizex == sizey)
+  bool have_data = ((sizex > 0) && (sizey > 0) && (spectrum_data.size()));
+  if (!have_data)
+    return;
+
+  bool square = (sizex == sizey);
+  setAlwaysSquare(square);
+  if (square)
     setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
   else
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
-  if ((sizex > 0) && (sizey > 0) && (spectrum_data.size()))
-  {
+  bool changed_dims = ((colorMap->data()->keySize() != sizex) ||
+                       (colorMap->data()->valueSize() != sizey));
+  if (changed_dims)
     colorMap->data()->setSize(sizex, sizey);
-    for (auto it : spectrum_data)
-      colorMap->data()->setCell(it.first.x, it.first.y, it.second);
-    setScaleType(scaleType());
-    setGradient(gradient());
+
+  for (auto it : spectrum_data)
+    colorMap->data()->setCell(it.first.x, it.first.y, it.second);
+
+  setScaleType(scaleType());
+  setGradient(gradient());
+  if (changed_dims)
     rescaleAxes();
-    updateGeometry();
-  }
+  updateGeometry();
   replotExtras();
 }
 
-void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey, const HistList2D &spectrum_data)
+void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey,
+                        const HistList2D &spectrum_data)
 {
-  colorMap->data()->clear();
-  setAlwaysSquare(sizex == sizey);
-  if (sizex == sizey)
+  bool have_data = ((sizex > 0) && (sizey > 0) && (spectrum_data.size()));
+  if (!have_data)
+    return;
+
+  bool square = (sizex == sizey);
+  setAlwaysSquare(square);
+  if (square)
     setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
   else
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
-  if ((sizex > 0) && (sizey > 0) && (spectrum_data.size()))
-  {
+  bool changed_dims = ((colorMap->data()->keySize() != sizex) ||
+                       (colorMap->data()->valueSize() != sizey));
+  if (changed_dims)
     colorMap->data()->setSize(sizex, sizey);
-    for (auto it : spectrum_data)
-      colorMap->data()->setCell(it.x, it.y, it.v);
-    setScaleType(scaleType());
-    setGradient(gradient());
+
+  for (auto it : spectrum_data)
+    colorMap->data()->setCell(it.x, it.y, it.v);
+
+  setScaleType(scaleType());
+  setGradient(gradient());
+  if (changed_dims)
     rescaleAxes();
-    updateGeometry();
-  }
+  updateGeometry();
   replotExtras();
 }
 
@@ -301,7 +319,7 @@ void Plot2D::setAxes(QString xlabel, double x1, double x2,
   colorMap->valueAxis()->setNumberPrecision(0);
   colorMap->setProperty("z_label", zlabel);
 
-  rescaleAxes();
+//  rescaleAxes();
 }
 
 bool Plot2D::inRange(double x1, double x2,
