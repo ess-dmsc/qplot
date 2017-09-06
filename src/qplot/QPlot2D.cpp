@@ -1,7 +1,5 @@
 #include "QPlot2D.h"
 
-#include "custom_logger.h"
-
 namespace QPlot
 {
 
@@ -240,7 +238,7 @@ void Plot2D::plotLabels()
 }
 
 
-void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey,
+void Plot2D::updatePlot(int sizex, int sizey,
                         const HistMap2D &spectrum_data)
 {
   bool have_data = ((sizex > 0) && (sizey > 0) && (spectrum_data.size()));
@@ -270,7 +268,7 @@ void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey,
   replotExtras();
 }
 
-void Plot2D::updatePlot(uint64_t sizex, uint64_t sizey,
+void Plot2D::updatePlot(int sizex, int sizey,
                         const HistList2D &spectrum_data)
 {
   bool have_data = ((sizex > 0) && (sizey > 0) && (spectrum_data.size()));

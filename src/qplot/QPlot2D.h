@@ -57,9 +57,9 @@ public:
   void clearExtras() override;
   void replotExtras() override;
 
-  void updatePlot(uint64_t sizex, uint64_t sizey,
+  void updatePlot(int sizex, int sizey,
                   const HistMap2D &spectrum_data);
-  void updatePlot(uint64_t sizex, uint64_t sizey,
+  void updatePlot(int sizex, int sizey,
                   const HistList2D &spectrum_data);
 
   void setAxes(QString xlabel, double x1, double x2,
