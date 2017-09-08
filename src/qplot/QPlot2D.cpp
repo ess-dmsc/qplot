@@ -268,6 +268,11 @@ void Plot2D::updatePlot(int sizex, int sizey,
   replotExtras();
 }
 
+void Plot2D::clearData() const
+{
+  colorMap->data()->fill(0);
+}
+
 void Plot2D::updatePlot(int sizex, int sizey,
                         const HistList2D &spectrum_data)
 {

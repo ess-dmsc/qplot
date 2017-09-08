@@ -80,6 +80,8 @@ public:
   void addLabels(const QList<Label2D>& labels);
   QList<Label2D> selectedLabels() const;
 
+  void clearData() const;
+
 public slots:
   void zoomOut() Q_DECL_OVERRIDE;
 
