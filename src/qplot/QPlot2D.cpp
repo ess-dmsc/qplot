@@ -360,9 +360,8 @@ void Plot2D::mouseClicked(double x, double y, QMouseEvent *event)
 
 void Plot2D::zoomOut()
 {
-  this->setCursor(Qt::WaitCursor);
   rescaleAxes();
-  replot();
+//  replot();
 
   double margin = 0.5;
   double x_lower = xAxis->range().lower;
@@ -372,9 +371,7 @@ void Plot2D::zoomOut()
   xAxis->setRange(x_lower - margin, x_upper + margin);
   yAxis->setRange(y_lower - margin, y_upper + margin);
 
-  replot();
-
-  this->setCursor(Qt::ArrowCursor);
+//  replot();
 }
 
 

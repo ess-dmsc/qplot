@@ -238,7 +238,7 @@ void Multi1D::zoomOut()
 {
   xAxis->setRange(getDomain());
   this->adjustY();
-  replot();
+//  replot();
 }
 
 void Multi1D::mousePressed(QMouseEvent*)

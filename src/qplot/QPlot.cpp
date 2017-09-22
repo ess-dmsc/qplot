@@ -458,6 +458,7 @@ void GenericPlot::executeButton(Button *button)
     export_menu_.exec(QCursor::pos());
   } else if (button->name() == "reset_scales") {
     this->zoomOut();
+    this->replot();
     emit zoomedOut();
   }
 }
