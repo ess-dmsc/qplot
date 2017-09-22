@@ -458,6 +458,7 @@ void GenericPlot::executeButton(Button *button)
     export_menu_.exec(QCursor::pos());
   } else if (button->name() == "reset_scales") {
     this->zoomOut();
+    emit zoomedOut();
   }
 }
 
@@ -675,7 +676,10 @@ void GenericPlot::optionsChanged(QAction* action)
   QString choice = action->text();
 
   if (scale_types_.count(choice))
+  {
     setScaleType(choice);
+    emit scaleChanged(choice);
+  }
   else if (grid_styles_.contains(choice))
     setGridStyle(choice);
   else if (choice == "Show marker labels")

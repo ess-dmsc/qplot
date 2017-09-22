@@ -78,6 +78,8 @@ public slots:
 signals:
   void mouseHover(double x, double y);
   void shiftStateChanged(bool);
+  void zoomedOut();
+  void scaleChanged(QString);
 
 protected:
   virtual void executeButton(Button *);
