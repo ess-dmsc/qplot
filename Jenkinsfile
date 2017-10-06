@@ -9,7 +9,8 @@ def failure_function(exception_obj, failureMessage) {
 }
 
 node ("qt") {
-    
+    cleanWs()
+
     try {
         dir("code") {
             stage("Checkout projects") {
@@ -31,7 +32,7 @@ node ("qt") {
         } catch (e) {
             failure_function(e, 'CMake failed')
         }
-        
+
         try {
             stage("Build project") {
                 sh "make VERBOSE=1"
