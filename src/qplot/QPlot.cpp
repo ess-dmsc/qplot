@@ -140,10 +140,16 @@ void GenericPlot::setShowGradientLegend(bool show)
     if ((colorMap = qobject_cast<QCPColorMap*>(plottable(i))))
       break;
 
-  if (show_gradient_legend_ && colorMap)
+  if (colorMap)
   {
-    addGradientLegend(colorMap);
-    setScaleType(current_scale_type_);
+    if (show_gradient_legend_)
+    {
+      addGradientLegend(colorMap);
+      setScaleType(scaleType());
+      setGradient(gradient());
+    }
+    else
+      removeGradientLegend();
   }
 
   updateGeometry();
