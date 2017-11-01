@@ -21,7 +21,8 @@ Plot2D::Plot2D(QWidget *parent)
 
   setInteraction(QCP::iMultiSelect, true);
 
-  setVisibleOptions(ShowOption::zoom | ShowOption::save | ShowOption::grid |
+  setVisibleOptions(ShowOption::zoom | ShowOption::save |
+                    ShowOption::grid | ShowOption::flip_y |
                     ShowOption::scale | ShowOption::gradients);
 }
 
