@@ -20,7 +20,8 @@ enum ShowOption : uint32_t {
   zoom      = 128,
   save      = 256,
   gradients = 512,
-  dither    = 1024
+  dither    = 1024,
+  flip_y    = 2048
 };
 
 Q_DECLARE_FLAGS(ShowOptions, ShowOption)
@@ -47,6 +48,7 @@ public:
   void setVisibleOptions(ShowOptions);
   ShowOptions visibleOptions() const;
 
+  bool flipY() const;
   bool alwaysSquare() const;
   bool antialiased() const;
   bool showGradientLegend() const;
@@ -58,6 +60,7 @@ public:
   QString plotStyle() const;
   QString gradient() const;
 
+  void setFlipY(bool);
   void setAlwaysSquare(bool);
   void setAntialiased(bool);
   void setShowGradientLegend(bool);
@@ -116,6 +119,7 @@ private:
   bool show_gradient_legend_ {false};
   bool show_marker_labels_ {true};
   bool show_title_ {true};
+  bool flip_y_ {false};
   uint16_t line_thickness_ {1};
   QString current_scale_type_ {"Linear"};
   QString current_grid_style_ {"Grid"};

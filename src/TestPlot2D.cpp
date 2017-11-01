@@ -15,7 +15,6 @@ TestPlot2D::TestPlot2D(QWidget *parent)
   ui->plot->setGradient("Spectrum2");
   ui->plot->setScaleType("Linear");
   ui->plot->setShowGradientLegend(true);
-  ui->plot->yAxis->setRangeReversed(true);
   connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel(QWheelEvent*)));
   connect(ui->plot, SIGNAL(zoomedOut()), this, SLOT(zoomedOut()));
 
@@ -30,6 +29,7 @@ TestPlot2D::TestPlot2D(QWidget *parent)
   connect(ui->checkSave, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
   connect(ui->checkGradients, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
   connect(ui->checkDither, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
+  connect(ui->checkFlipY, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
 }
 
 void TestPlot2D::init(uint32_t nx, uint32_t ny)
@@ -103,6 +103,8 @@ void TestPlot2D::updateShowOptions()
     opts |= QPlot::gradients;
   if (ui->checkDither->isChecked())
     opts |= QPlot::dither;
+  if (ui->checkFlipY->isChecked())
+    opts |= QPlot::flip_y;
 
   ui->plot->setVisibleOptions(opts);
 }
@@ -120,5 +122,6 @@ void TestPlot2D::updateShowOptions(QPlot::ShowOptions opts)
   ui->checkSave->setChecked(opts.testFlag(QPlot::save));
   ui->checkGradients->setChecked(opts.testFlag(QPlot::gradients));
   ui->checkDither->setChecked(opts.testFlag(QPlot::dither));
+  ui->checkFlipY->setChecked(opts.testFlag(QPlot::flip_y));
 }
 

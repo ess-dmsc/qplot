@@ -60,6 +60,11 @@ void GenericPlot::replotExtras()
 
 //getters
 
+bool GenericPlot::flipY() const
+{
+  return flip_y_;
+}
+
 bool GenericPlot::alwaysSquare() const
 {
   return always_square_;
@@ -112,6 +117,12 @@ QString GenericPlot::plotStyle() const
 
 
 //setters
+
+void GenericPlot::setFlipY(bool fy)
+{
+  flip_y_ = fy;
+  yAxis->setRangeReversed(fy);
+}
 
 void GenericPlot::setAlwaysSquare(bool sq)
 {
@@ -693,6 +704,8 @@ void GenericPlot::optionsChanged(QAction* action)
     setShowMarkerLabels(!show_marker_labels_);
   else if (choice == "Show title")
     setShowTitle(!show_title_);
+  else if (choice == "Flip Y axis")
+    setFlipY(!flip_y_);
   else if (choice == "Antialiased")
     setAntialiased(!antialiased_);
   else if (plot_styles_.contains(choice))
@@ -735,6 +748,12 @@ void GenericPlot::rebuildOptionsMenu()
   {
     for (auto &s : plot_styles_)
       options_menu_.addAction(s);
+    options_menu_.addSeparator();
+  }
+
+  if (visible_options_.testFlag(ShowOption::flip_y))
+  {
+    options_menu_.addAction("Flip Y axis");
     options_menu_.addSeparator();
   }
 
@@ -783,6 +802,7 @@ void GenericPlot::checkoffOptionsMenu()
                   (q->text() == current_grid_style_) ||
                   (q->text() == current_gradient_) ||
                   (q->text() == QString::number(line_thickness_)) ||
+                  ((q->text() == "Flip Y axis") && flip_y_) ||
                   ((q->text() == "Show marker labels") && show_marker_labels_) ||
                   ((q->text() == "Show title") && show_title_) ||
                   ((q->text() == "Show gradient scale") && show_gradient_legend_)||

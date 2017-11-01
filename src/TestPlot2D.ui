@@ -163,6 +163,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QCheckBox" name="checkFlipY">
+          <property name="text">
+           <string>flip y</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
