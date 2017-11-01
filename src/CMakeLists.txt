@@ -5,6 +5,9 @@ project(qplot_test CXX)
 # locations on all platforms.
 include(GNUInstallDirs)
 
+set(EXTRA_MODULES_DIR ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${EXTRA_MODULES_DIR})
+
 #===========================================================
 # Internal compiler options
 #===========================================================
@@ -16,20 +19,7 @@ if(NOT CMAKE_CXX_STANDARD OR CMAKE_CXX_STANDARD LESS 11)
 endif()
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-#=========================================================
-# Function for deducing include dirs
-# retname - name of parent variable to fill
-# file_list - list of dirs, pass to fn as "${list_var}"
-#=========================================================
-function(dirs_of retname file_list)
-  set(dlist "")
-  foreach (_file ${file_list})
-      get_filename_component(_dir ${_file} PATH)
-      list (APPEND dlist ${_dir})
-  endforeach()
-  list(REMOVE_DUPLICATES dlist)
-  set (${retname} ${dlist} PARENT_SCOPE)
-endfunction(dirs_of)
+include(${EXTRA_MODULES_DIR}/DirsOf.cmake)
 
 # Qt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

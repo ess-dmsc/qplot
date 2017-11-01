@@ -492,18 +492,18 @@ void GenericPlot::plotButtons()
 
   if (visible_options_ & ShowOptions::zoom)
     addStackButton(new Button(this,
-                              QPixmap(":/icons/oxy/22/view_fullscreen.png"),
+                              QPixmap(":/qplot/icons/view_fullscreen.png"),
                               "reset_scales", "Zoom out",
                               Qt::AlignBottom | Qt::AlignRight));
 
   if (!options_menu_.isEmpty())
-    addStackButton(new Button(this, QPixmap(":/icons/oxy/22/view_statistics.png"),
+    addStackButton(new Button(this, QPixmap(":/qplot/icons/view_statistics.png"),
                               "options", "Style options",
                               Qt::AlignBottom | Qt::AlignRight));
 
   if (visible_options_ & ShowOptions::save)
     addStackButton(new Button(this,
-                              QPixmap(":/icons/oxy/22/document_save.png"),
+                              QPixmap(":/qplot/icons/document_save.png"),
                               "export", "Export plot",
                               Qt::AlignBottom | Qt::AlignRight));
 }

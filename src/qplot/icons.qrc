@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/qplot">
+        <file>icons/document_save.png</file>
+        <file>icons/view_fullscreen.png</file>
+        <file>icons/view_statistics.png</file>
+    </qresource>
+</RCC>
