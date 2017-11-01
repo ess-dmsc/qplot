@@ -24,6 +24,5 @@ private slots:
 private:
   Ui::TestApp *ui;
 
-  void init2d(uint32_t nx, uint32_t ny);
 };
 

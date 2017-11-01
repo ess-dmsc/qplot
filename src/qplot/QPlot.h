@@ -8,23 +8,24 @@
 namespace QPlot
 {
 
-enum ShowOptions {
+enum ShowOption : uint32_t {
   empty     = 0,
-  style     = 1 << 0,
-  scale     = 1 << 1,
-  labels    = 1 << 2,
-  themes    = 1 << 3,
-  thickness = 1 << 4,
-  grid      = 1 << 5,
-  title     = 1 << 6,
-  zoom      = 1 << 7,
-  save      = 1 << 8,
-  gradients = 1 << 9,
-  dither    = 1 << 10
+  style     = 1,
+  scale     = 2,
+  labels    = 4,
+  themes    = 8,
+  thickness = 16,
+  grid      = 32,
+  title     = 64,
+  zoom      = 128,
+  save      = 256,
+  gradients = 512,
+  dither    = 1024
 };
 
-inline ShowOptions operator|(ShowOptions a, ShowOptions b) {return static_cast<ShowOptions>(static_cast<int>(a) | static_cast<int>(b));}
-inline ShowOptions operator&(ShowOptions a, ShowOptions b) {return static_cast<ShowOptions>(static_cast<int>(a) & static_cast<int>(b));}
+Q_DECLARE_FLAGS(ShowOptions, ShowOption)
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ShowOptions)
 
 class GenericPlot : public QCustomPlot
 {

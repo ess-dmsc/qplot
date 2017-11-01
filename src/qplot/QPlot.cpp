@@ -18,8 +18,8 @@ void GenericPlot::setVisibleOptions(ShowOptions options)
 {
   visible_options_ = options;
 
-  setInteraction(QCP::iRangeDrag, options & ShowOptions::zoom);
-  setInteraction(QCP::iRangeZoom, options & ShowOptions::zoom);
+  setInteraction(QCP::iRangeDrag, options.testFlag(zoom));
+  setInteraction(QCP::iRangeZoom, options.testFlag(zoom));
 
   rebuildOptionsMenu();
   this->replotExtras();
@@ -490,7 +490,7 @@ void GenericPlot::plotButtons()
 {
   lastStackButton = nullptr;
 
-  if (visible_options_ & ShowOptions::zoom)
+  if (visible_options_.testFlag(zoom))
     addStackButton(new Button(this,
                               QPixmap(":/qplot/icons/view_fullscreen.png"),
                               "reset_scales", "Zoom out",
@@ -501,7 +501,7 @@ void GenericPlot::plotButtons()
                               "options", "Style options",
                               Qt::AlignBottom | Qt::AlignRight));
 
-  if (visible_options_ & ShowOptions::save)
+  if (visible_options_.testFlag(ShowOption::save))
     addStackButton(new Button(this,
                               QPixmap(":/qplot/icons/document_save.png"),
                               "export", "Export plot",
@@ -627,7 +627,7 @@ QFont GenericPlot::rescaleFont(QFont font, double size_offset)
 
 void GenericPlot::setGraphThickness(QCPGraph* graph)
 {
-  if (visible_options_ & ShowOptions::thickness)
+  if (visible_options_.testFlag(thickness))
   {
     QPen pen = graph->pen();
     pen.setWidth(line_thickness_);
@@ -706,33 +706,33 @@ void GenericPlot::rebuildOptionsMenu()
 {
   options_menu_.clear();
 
-  if (visible_options_ & ShowOptions::scale)
+  if (visible_options_.testFlag(ShowOption::scale))
   {
     for (auto &s : scale_types_.keys())
       options_menu_.addAction(s);
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::labels)
+  if (visible_options_.testFlag(ShowOption::labels))
   {
     options_menu_.addAction("Show marker labels");
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::title)
+  if (visible_options_.testFlag(ShowOption::title))
   {
     options_menu_.addAction("Show title");
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::style)
+  if (visible_options_.testFlag(ShowOption::style))
   {
     for (auto &s : plot_styles_)
       options_menu_.addAction(s);
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::thickness)
+  if (visible_options_.testFlag(ShowOption::thickness))
   {
     options_menu_.addAction("1");
     options_menu_.addAction("2");
@@ -740,7 +740,7 @@ void GenericPlot::rebuildOptionsMenu()
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::gradients)
+  if (visible_options_.testFlag(ShowOption::gradients))
   {
     if (!gradients_.empty())
     {
@@ -752,14 +752,14 @@ void GenericPlot::rebuildOptionsMenu()
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::grid)
+  if (visible_options_.testFlag(ShowOption::grid))
   {
     for (auto &s : grid_styles_)
       options_menu_.addAction(s);
     options_menu_.addSeparator();
   }
 
-  if (visible_options_ & ShowOptions::dither)
+  if (visible_options_.testFlag(ShowOption::dither))
   {
     options_menu_.addAction("Antialiased");
   }

@@ -53,9 +53,9 @@ Multi1D::Multi1D(QWidget *parent)
   setPlotStyle("Step center");
   setGridStyle("Grid + subgrid");
 
-  setVisibleOptions(ShowOptions::zoom | ShowOptions::save |
-                    ShowOptions::scale | ShowOptions::style |
-                    ShowOptions::thickness | ShowOptions::title);
+  setVisibleOptions(ShowOption::zoom | ShowOption::save |
+                    ShowOption::scale | ShowOption::style |
+                    ShowOption::thickness | ShowOption::title);
 
   replotExtras();
 }
