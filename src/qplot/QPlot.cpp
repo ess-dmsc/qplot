@@ -711,7 +711,10 @@ void GenericPlot::optionsChanged(QAction* action)
   else if (plot_styles_.contains(choice))
     setPlotStyle(choice);
   else if (gradients_.count(choice))
+  {
     setGradient(choice);
+    emit gradientChanged(choice);
+  }
   else if (choice == "Show gradient scale")
     setShowGradientLegend(!show_gradient_legend_);
   else if ((choice == "1") || (choice == "2") || (choice == "3"))

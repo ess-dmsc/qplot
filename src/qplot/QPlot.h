@@ -84,6 +84,7 @@ signals:
   void shiftStateChanged(bool);
   void zoomedOut();
   void scaleChanged(QString);
+  void gradientChanged(QString);
 
 protected:
   virtual void executeButton(Button *);
