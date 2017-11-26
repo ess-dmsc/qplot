@@ -6,7 +6,7 @@ namespace QPlot
 Plot2D::Plot2D(QWidget *parent)
   : GenericPlot(parent)
 {
-  initializeGradients();
+  setGradients(Gradients::defaultGradients());
 
   colorMap->setTightBoundary(false);
   axisRect()->setupFullAxesBox();
@@ -24,29 +24,6 @@ Plot2D::Plot2D(QWidget *parent)
   setVisibleOptions(ShowOption::zoom | ShowOption::save |
                     ShowOption::grid | ShowOption::flip_y |
                     ShowOption::scale | ShowOption::gradients);
-}
-
-void Plot2D::initializeGradients()
-{
-  addStandardGradients();
-
-  addCustomGradient("Blues", {"#ffffff","#deebf7","#9ecae1","#3182bd"});
-  addCustomGradient("Greens", {"#ffffff","#e5f5e0","#a1d99b","#31a354"});
-  addCustomGradient("Oranges", {"#ffffff",
-                                "#fee6ce",
-                                "#fdae6b",
-                                "#e6550d"});
-  addCustomGradient("Purples", {"#ffffff","#efedf5","#bcbddc","#756bb1"});
-  addCustomGradient("Reds", {"#ffffff","#fee0d2","#fc9272","#de2d26"});
-  addCustomGradient("Greys", {"#ffffff","#f0f0f0","#bdbdbd","#636363"});
-
-  addCustomGradient("GnBu5", {"#ffffff","#f0f9e8","#bae4bc","#7bccc4","#43a2ca","#0868ac"});
-  addCustomGradient("PuRd5", {"#ffffff","#f1eef6","#d7b5d8","#df65b0","#dd1c77","#980043"});
-  addCustomGradient("RdPu5", {"#ffffff","#feebe2","#fbb4b9","#f768a1","#c51b8a","#7a0177"});
-  addCustomGradient("YlGn5", {"#ffffff","#ffffcc","#c2e699","#78c679","#31a354","#006837"});
-  addCustomGradient("YlGnBu5", {"#ffffff","#ffffcc","#a1dab4","#41b6c4","#2c7fb8","#253494"});
-
-  addCustomGradient("Spectrum2", {"#ffffff","#0000ff","#00ffff","#00ff00","#ffff00","#ff0000","#000000"});
 }
 
 void Plot2D::setOrientation(Qt::Orientation o)

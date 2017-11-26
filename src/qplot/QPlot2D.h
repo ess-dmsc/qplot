@@ -95,7 +95,6 @@ protected:
   QList<MarkerBox2D> boxes_;
   QList<Label2D> labels_;
 
-  void initializeGradients();
   void plotBoxes();
   void plotLabels();
 };

@@ -8,6 +8,28 @@
 namespace QPlot
 {
 
+class Gradients
+{
+  public:
+    Gradients() {}
+    static Gradients defaultGradients();
+
+    bool empty() const;
+    void clear();
+
+    QStringList names() const;
+    bool contains(QString name) const;
+    QCPColorGradient get(QString name) const;
+
+    void remove(QString name);
+    void addStandardGradients();
+    void set(QString name, QCPColorGradient gr);
+    void set(QString name, std::initializer_list<std::string> colors);
+
+  private:
+    QMap<QString, QCPColorGradient> gradients_;
+};
+
 enum ShowOption : uint32_t {
   empty     = 0,
   style     = 1,
@@ -72,9 +94,8 @@ public:
   void setPlotStyle(QString);
   void setGradient(QString);
 
-  void addStandardGradients();
-  void addCustomGradient(QString name,
-                         std::initializer_list<std::string> colors);
+  Gradients gradients() const;
+  void setGradients(Gradients gs);
 
 public slots:
   virtual void zoomOut() {}
@@ -127,7 +148,7 @@ private:
   QString current_plot_style_ {"Lines"};
   QString current_gradient_;
 
-  QMap<QString, QCPColorGradient> gradients_;
+  Gradients gradients_;
   QMap<QString, QCPAxis::ScaleType> scale_types_
   { {"Linear", QCPAxis::stLinear}, {"Logarithmic", QCPAxis::stLogarithmic} };
   QSet<QString> grid_styles_ {"No grid", "Grid", "Grid + subgrid"};
