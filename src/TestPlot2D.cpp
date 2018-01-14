@@ -138,15 +138,8 @@ void TestPlot2D::on_pushGradientSelector_clicked()
   auto gs = new QPlot::GradientSelector(ui->plot->gradients(),
                                         ui->plot->gradient(),
                                         qobject_cast<QWidget*> (parent()));
-  connect(gs, SIGNAL(gradient_selected(QString)),
-          this, SLOT(select_gradient(QString)));
   gs->setModal(true);
   gs->exec();
-}
-
-void TestPlot2D::select_gradient(QString n)
-{
-  ui->plot->setGradient(n);
+  ui->plot->setGradient(gs->selected_gradient());
   ui->plot->replot();
 }
-

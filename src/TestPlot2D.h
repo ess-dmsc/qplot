@@ -25,8 +25,6 @@ class TestPlot2D : public QWidget
 
     void on_pushGradientSelector_clicked();
 
-    void select_gradient(QString);
-
   private:
     Ui::TestPlot2D *ui;
 

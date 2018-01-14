@@ -58,18 +58,18 @@ class GradientSelector : public QDialog
 
   public:
     explicit GradientSelector(Gradients gradients,
-                              QString gradient,
+                              QString selected_gradient,
                               QWidget *parent = 0);
 
-  private slots:
-    void accept_selection();
-    void itemDoubleClicked(QModelIndex);
+    QString selected_gradient() const;
 
-  signals:
-    void gradient_selected(QString);
+  private slots:
+    void itemDoubleClicked(QModelIndex);
 
   private:
     Gradients gradients_;
+    QString selected_gradient_;
+
     GradientsModel model_;
     GradientDelegate delegate_;
 

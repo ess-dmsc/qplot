@@ -317,12 +317,6 @@ void GenericPlot::setGradients(Gradients gs)
   gradients_ = gs;
 }
 
-void GenericPlot::pickGradient(QString g)
-{
-  setGradient(g);
-  emit gradientChanged(g);
-}
-
 QSize GenericPlot::sizeHint() const
 {
   if (always_square_)
@@ -459,10 +453,10 @@ void GenericPlot::selectGradient()
   auto gs = new QPlot::GradientSelector(gradients(),
                                         gradient(),
                                         qobject_cast<QWidget*> (parent()));
-  connect(gs, SIGNAL(gradient_selected(QString)),
-          this, SLOT(pickGradient(QString)));
   gs->setModal(true);
   gs->exec();
+  setGradient(gs->selected_gradient());
+  emit gradientChanged(gs->selected_gradient());
 }
 
 void GenericPlot::executeButton(Button *button)

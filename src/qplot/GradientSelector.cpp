@@ -115,10 +115,11 @@ QVariant GradientsModel::data(const QModelIndex &index, int role) const
 }
 
 GradientSelector::GradientSelector(Gradients gradients,
-                                   QString gradient,
+                                   QString selected_gradient,
                                    QWidget *parent)
   : QDialog(parent)
   , gradients_(gradients)
+  , selected_gradient_(selected_gradient)
   , model_(gradients_, this)
 {
   QListView* tview = new QListView();
@@ -134,7 +135,7 @@ GradientSelector::GradientSelector(Gradients gradients,
   auto names = gradients_.names();
   for (int i=0; i < names.size(); ++i)
   {
-    if (names[i] == gradient)
+    if (names[i] == selected_gradient_)
     {
       selection_->select(model_.index(i), QItemSelectionModel::Select);
       break;
@@ -158,16 +159,17 @@ GradientSelector::GradientSelector(Gradients gradients,
 
 void GradientSelector::itemDoubleClicked(QModelIndex)
 {
-  accept_selection();
-}
-
-void GradientSelector::accept_selection()
-{
   QModelIndexList ixl = selection_->selectedRows();
   if (ixl.empty())
     return;
-  emit gradient_selected(gradients_.names().at(ixl.front().row()));
+  selected_gradient_ = gradients_.names().at(ixl.front().row());
   accept();
 }
+
+QString GradientSelector::selected_gradient() const
+{
+  return selected_gradient_;
+}
+
 
 }

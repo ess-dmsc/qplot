@@ -79,9 +79,6 @@ public:
 public slots:
   virtual void zoomOut() {}
 
-private slots:
-  void pickGradient(QString);
-
 signals:
   void mouseHover(double x, double y);
   void shiftStateChanged(bool);
