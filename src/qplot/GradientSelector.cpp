@@ -4,6 +4,8 @@
 #include <QDialogButtonBox>
 #include <QTableView>
 
+#include <iostream>
+
 namespace QPlot
 {
 
@@ -24,7 +26,7 @@ void paintGradient(QPainter* painter,
 
   if (!text.isEmpty())
   {
-//    painter->setPen(QPen(inverseColor(color), 4));
+    //    painter->setPen(QPen(inverseColor(color), 4));
     QFont f = painter->font();
     f.setBold(true);
     painter->setFont(f);
@@ -45,8 +47,12 @@ void paintGradient(QPainter* painter,
       g.setColorAt(s.first, s.second);
   else
   {
+    double step = rect.width();
+    if (step == 0.0)
+      step = 100.0;
+    step = 1.0 / step;
     QCPRange r(0, 1.0);
-    for (double i = 0; i < 1.0; i+=0.002)
+    for (double i = 0; i < 1.0; i+= step)
       g.setColorAt(i, colors.color(i,r,false));
   }
   paintGradient(painter, rect, g, text);
@@ -54,13 +60,27 @@ void paintGradient(QPainter* painter,
 
 
 void GradientDelegate::paint(QPainter *painter,
-           const QStyleOptionViewItem &option,
-           const QModelIndex &index) const
+                             const QStyleOptionViewItem &option,
+                             const QModelIndex &index) const
 {
   if (index.data().canConvert<QCPColorGradient>())
   {
     QCPColorGradient gradient = qvariant_cast<QCPColorGradient>(index.data());
     paintGradient(painter, option.rect, gradient);
+
+    if (option.state & QStyle::State_Selected)
+    {
+      int offset = hl_thickness_ / 2 + 2;
+
+      painter->setPen(QPen(Qt::black, hl_thickness_ + 2,
+                           Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+      painter->drawRect(option.rect.adjusted(offset,offset,-offset,-offset));
+
+      painter->setPen(QPen(Qt::white, hl_thickness_,
+                           Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+      painter->drawRect(option.rect.adjusted(offset,offset,-offset,-offset));
+    }
+
     return;
   }
 
@@ -70,8 +90,8 @@ void GradientDelegate::paint(QPainter *painter,
 
 
 GradientsModel::GradientsModel(Gradients& gradients, QObject *parent)
-    : QAbstractTableModel(parent)
-    , gradients_(gradients)
+  : QAbstractListModel(parent)
+  , gradients_(gradients)
 {}
 
 int GradientsModel::rowCount(const QModelIndex& /*parent*/) const
@@ -79,76 +99,75 @@ int GradientsModel::rowCount(const QModelIndex& /*parent*/) const
   return gradients_.size();
 }
 
-int GradientsModel::columnCount(const QModelIndex& /*parent*/) const
-{
-  return 2;
-}
 
 QVariant GradientsModel::data(const QModelIndex &index, int role) const
 {
   if (!index.isValid())
-      return QVariant();
+    return QVariant();
 
   if (index.row() >= gradients_.size() || index.row() < 0)
-      return QVariant();
-
-  if (index.column() > 1 || index.column() < 0)
-      return QVariant();
+    return QVariant();
 
   if (role == Qt::DisplayRole)
-  {
-    if (index.column() == 0)
-      return gradients_.names()[index.row()];
-    else if (index.column() == 1)
       return QVariant::fromValue(gradients_.get(index.row()));
-  }
-//  else if (role == Qt::BackgroundRole) {
-//      int batch = (index.row() / 100) % 2;
-//      if (batch == 0)
-//          return qApp->palette().base();
-//      else
-//          return qApp->palette().alternateBase();
-//  }
+
   return QVariant();
 }
 
-GradientSelector::GradientSelector(Gradients gradients, QWidget *parent)
+GradientSelector::GradientSelector(Gradients gradients,
+                                   QString gradient,
+                                   QWidget *parent)
   : QDialog(parent)
   , gradients_(gradients)
   , model_(gradients_, this)
 {
-  QTableView* tview = new QTableView();
+  QListView* tview = new QListView();
   tview->setModel(&model_);
   tview->setItemDelegate(&delegate_);
-  tview->verticalHeader()->hide();
-  tview->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-  tview->horizontalHeader()->hide();
-  tview->horizontalHeader()->setStretchLastSection(true);
-  tview->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-  tview->setSelectionBehavior(QAbstractItemView::SelectRows);
   tview->setSelectionMode(QAbstractItemView::SingleSelection);
+
+  connect(tview, SIGNAL(doubleClicked(QModelIndex)),
+          this, SLOT(itemDoubleClicked(QModelIndex)));
+
+  selection_ = tview->selectionModel();
+  selection_->clearSelection();
+  auto names = gradients_.names();
+  for (int i=0; i < names.size(); ++i)
+  {
+    if (names[i] == gradient)
+    {
+      selection_->select(model_.index(i), QItemSelectionModel::Select);
+      break;
+    }
+  }
 
   QVBoxLayout *total    = new QVBoxLayout();
   total->addWidget(tview);
-
-  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-  connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept_selection()));
-  connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-  total->addWidget(buttonBox);
-
+  total->setContentsMargins(0,0,0,0);
   setLayout(total);
 
   QRect myrect = this->geometry();
-  myrect.setWidth(350);
-  myrect.setHeight(gradients_.size() * 25);
+  myrect.setWidth(150);
+  myrect.setHeight(gradients_.size() * 18);
   setGeometry(myrect);
 
-  setFixedSize(size());
+  setContentsMargins(0,0,0,0);
+
+  //setFixedSize(size());
+}
+
+void GradientSelector::itemDoubleClicked(QModelIndex)
+{
+  accept_selection();
 }
 
 void GradientSelector::accept_selection()
 {
-
+  QModelIndexList ixl = selection_->selectedRows();
+  if (ixl.empty())
+    return;
+  emit gradient_selected(gradients_.names().at(ixl.front().row()));
+  accept();
 }
 
 }

@@ -79,6 +79,9 @@ public:
 public slots:
   virtual void zoomOut() {}
 
+private slots:
+  void pickGradient(QString);
+
 signals:
   void mouseHover(double x, double y);
   void shiftStateChanged(bool);
@@ -148,6 +151,8 @@ private:
                                       const QString &directory,
                                       const QString &filter);
   static bool validateFile(QWidget* parent, QString, bool);
+
+  void selectGradient();
 };
 
 

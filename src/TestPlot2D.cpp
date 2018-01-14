@@ -2,6 +2,8 @@
 #include "GradientSelector.h"
 #include "ui_TestPlot2D.h"
 
+#include <iostream>
+
 TestPlot2D::TestPlot2D(QWidget *parent)
   : QWidget(parent)
   , ui(new Ui::TestPlot2D)
@@ -13,6 +15,10 @@ TestPlot2D::TestPlot2D(QWidget *parent)
   ui->plot->setSizePolicy(QSizePolicy::Preferred,
                        QSizePolicy::MinimumExpanding);
   updateShowOptions(ui->plot->visibleOptions());
+
+  QPlot::Gradients g;
+  g.addStandardGradients();
+  ui->plot->setGradients(g);
   ui->plot->setGradient("Spectrum2");
   ui->plot->setScaleType("Linear");
   ui->plot->setShowGradientLegend(true);
@@ -129,8 +135,18 @@ void TestPlot2D::updateShowOptions(QPlot::ShowOptions opts)
 
 void TestPlot2D::on_pushGradientSelector_clicked()
 {
-  auto gs = new QPlot::GradientSelector(QPlot::Gradients::defaultGradients(),
+  auto gs = new QPlot::GradientSelector(ui->plot->gradients(),
+                                        ui->plot->gradient(),
                                         qobject_cast<QWidget*> (parent()));
+  connect(gs, SIGNAL(gradient_selected(QString)),
+          this, SLOT(select_gradient(QString)));
   gs->setModal(true);
   gs->exec();
 }
+
+void TestPlot2D::select_gradient(QString n)
+{
+  ui->plot->setGradient(n);
+  ui->plot->replot();
+}
+

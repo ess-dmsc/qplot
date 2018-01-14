@@ -1,4 +1,5 @@
 #include "QPlot.h"
+#include "GradientSelector.h"
 
 namespace QPlot
 {
@@ -183,6 +184,7 @@ void GenericPlot::addGradientLegend(QCPColorMap *colorMap)
 
   //add color scale
   QCPColorScale *colorScale = new QCPColorScale(this);
+
   plotLayout()->addElement(0, 1, colorScale);
   colorMap->setColorScale(colorScale);
 
@@ -315,6 +317,12 @@ void GenericPlot::setGradients(Gradients gs)
   gradients_ = gs;
 }
 
+void GenericPlot::pickGradient(QString g)
+{
+  setGradient(g);
+  emit gradientChanged(g);
+}
+
 QSize GenericPlot::sizeHint() const
 {
   if (always_square_)
@@ -422,9 +430,12 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
 
     QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->localPos(), false));
 
-    if (Button *button = qobject_cast<Button*>(ai))
+    if (Button* button = qobject_cast<Button*>(ai))
       if (button->visible())
         this->executeButton(button);
+
+    if (qobject_cast<QCPColorScale*>(layoutElementAt(event->localPos())))
+      selectGradient();
 
     if (!ai)
     {
@@ -441,6 +452,17 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
     }
   }
   QCustomPlot::mouseReleaseEvent(event);
+}
+
+void GenericPlot::selectGradient()
+{
+  auto gs = new QPlot::GradientSelector(gradients(),
+                                        gradient(),
+                                        qobject_cast<QWidget*> (parent()));
+  connect(gs, SIGNAL(gradient_selected(QString)),
+          this, SLOT(pickGradient(QString)));
+  gs->setModal(true);
+  gs->exec();
 }
 
 void GenericPlot::executeButton(Button *button)
@@ -686,11 +708,8 @@ void GenericPlot::optionsChanged(QAction* action)
     setAntialiased(!antialiased_);
   else if (plot_styles_.contains(choice))
     setPlotStyle(choice);
-  else if (gradients_.contains(choice))
-  {
-    setGradient(choice);
-    emit gradientChanged(choice);
-  }
+  else if (choice == "Pick gradient")
+    selectGradient();
   else if (choice == "Show gradient scale")
     setShowGradientLegend(!show_gradient_legend_);
   else if ((choice == "1") || (choice == "2") || (choice == "3"))
@@ -749,10 +768,9 @@ void GenericPlot::rebuildOptionsMenu()
     if (!gradients_.empty())
     {
       options_menu_.addAction("Show gradient scale");
+      options_menu_.addAction("Pick gradient");
       options_menu_.addSeparator();
     }
-    for (auto &q : gradients_.names())
-      options_menu_.addAction(q);
     options_menu_.addSeparator();
   }
 
@@ -775,11 +793,11 @@ void GenericPlot::checkoffOptionsMenu()
 {
   for (auto &q : options_menu_.actions())
   {
-    q->setCheckable(true);
+    if (q->text() != "Pick gradient")
+      q->setCheckable(true);
     q->setChecked((q->text() == current_scale_type_) ||
                   (q->text() == current_plot_style_) ||
                   (q->text() == current_grid_style_) ||
-                  (q->text() == current_gradient_) ||
                   (q->text() == QString::number(line_thickness_)) ||
                   ((q->text() == "Flip Y axis") && flip_y_) ||
                   ((q->text() == "Show marker labels") && show_marker_labels_) ||
