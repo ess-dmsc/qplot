@@ -88,7 +88,7 @@ node('docker') {
     }
 
     def builders = [:]
-    builders['MocOSX'] = get_osx_pipeline()
+//    builders['MocOSX'] = get_osx_pipeline()
     builders['Fedora'] = get_fedora_pipeline()
     
     parallel builders
