@@ -1,6 +1,4 @@
-/*
- * qplot Jenkinsfile
- */
+project = "qplot"
 
 def failure_function(exception_obj, failureMessage) {
     def toEmails = [[$class: 'DevelopersRecipientProvider']]
@@ -8,38 +6,38 @@ def failure_function(exception_obj, failureMessage) {
     throw exception_obj
 }
 
-node ("fedora") {
-    cleanWs()
+def get_fedora_pipeline()
+{
+    return {
+        stage("Fedora") {
+            node ("fedora") {
+            // Delete workspace when build is done
+                cleanWs()
 
-    try {
-        dir("code") {
-            stage("Checkout projects") {
-                checkout scm
-                sh "git submodule update --init"
+                dir("${project}/code") {
+                    try {
+                        checkout scm
+                    } catch (e) {
+                        failure_function(e, 'MacOSX / Checkout failed')
+                    }
+                }
+
+                dir("${project}/build") {
+                    try {
+                        sh "cmake ../code/src"
+                    } catch (e) {
+                        failure_function(e, 'MacOSX / CMake failed')
+                    }
+
+                    try {
+                        sh "make"
+                    } catch (e) {
+                        failure_function(e, 'MacOSX / build failed')
+                    }
+                }
+
             }
         }
-    } catch (e) {
-        failure_function(e, 'Checkout failed')
-    }
-
-    dir("build") {
-        try {
-            stage("Run CMake") {
-                sh 'rm -rf ./*'
-                sh "cmake ../code/src"
-            }
-        } catch (e) {
-            failure_function(e, 'CMake failed')
-        }
-
-        try {
-            stage("Build project") {
-                sh "make"
-            }
-        } catch (e) {
-            failure_function(e, 'Build failed')
-        }
-
     }
 }
 
@@ -90,11 +88,8 @@ node('docker') {
     }
 
     def builders = [:]
-    //for (x in images.keySet()) {
-    //    def image_key = x
-    //    builders[image_key] = get_pipeline(image_key)
-    //}
     builders['MocOSX'] = get_osx_pipeline()
+    builders['Fedora'] = get_fedora_pipeline()
     
     parallel builders
 
