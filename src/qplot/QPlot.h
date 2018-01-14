@@ -3,32 +3,11 @@
 #include "qcustomplot.h"
 #include "QPlotDraggable.h"
 #include "QPlotButton.h"
+#include "Gradients.h"
 #include <set>
 
 namespace QPlot
 {
-
-class Gradients
-{
-  public:
-    Gradients() {}
-    static Gradients defaultGradients();
-
-    bool empty() const;
-    void clear();
-
-    QStringList names() const;
-    bool contains(QString name) const;
-    QCPColorGradient get(QString name) const;
-
-    void remove(QString name);
-    void addStandardGradients();
-    void set(QString name, QCPColorGradient gr);
-    void set(QString name, std::initializer_list<std::string> colors);
-
-  private:
-    QMap<QString, QCPColorGradient> gradients_;
-};
 
 enum ShowOption : uint32_t {
   empty     = 0,

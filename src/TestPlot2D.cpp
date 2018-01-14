@@ -1,4 +1,5 @@
 #include "TestPlot2D.h"
+#include "GradientSelector.h"
 #include "ui_TestPlot2D.h"
 
 TestPlot2D::TestPlot2D(QWidget *parent)
@@ -125,3 +126,11 @@ void TestPlot2D::updateShowOptions(QPlot::ShowOptions opts)
   ui->checkFlipY->setChecked(opts.testFlag(QPlot::flip_y));
 }
 
+
+void TestPlot2D::on_pushGradientSelector_clicked()
+{
+  auto gs = new QPlot::GradientSelector(QPlot::Gradients::defaultGradients(),
+                                        qobject_cast<QWidget*> (parent()));
+  gs->setModal(true);
+  gs->exec();
+}

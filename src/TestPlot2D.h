@@ -23,6 +23,8 @@ class TestPlot2D : public QWidget
 
     void updateShowOptions();
 
+    void on_pushGradientSelector_clicked();
+
   private:
     Ui::TestPlot2D *ui;
 
