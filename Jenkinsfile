@@ -6,41 +6,6 @@ def failure_function(exception_obj, failureMessage) {
     throw exception_obj
 }
 
-def get_fedora_pipeline()
-{
-    return {
-        stage("Fedora") {
-            node ("fedora") {
-            // Delete workspace when build is done
-                cleanWs()
-
-                dir("${project}/code") {
-                    try {
-                        checkout scm
-                    } catch (e) {
-                        failure_function(e, 'MacOSX / Checkout failed')
-                    }
-                }
-
-                dir("${project}/build") {
-                    try {
-                        sh "cmake ../code/src"
-                    } catch (e) {
-                        failure_function(e, 'MacOSX / CMake failed')
-                    }
-
-                    try {
-                        sh "make"
-                    } catch (e) {
-                        failure_function(e, 'MacOSX / build failed')
-                    }
-                }
-
-            }
-        }
-    }
-}
-
 def get_osx_pipeline()
 {
     return {
@@ -59,7 +24,7 @@ def get_osx_pipeline()
 
                 dir("${project}/build") {
                     try {
-                        sh "cmake ../code/src"
+                        sh "cmake ../code"
                     } catch (e) {
                         failure_function(e, 'MacOSX / CMake failed')
                     }
@@ -88,9 +53,8 @@ node('docker') {
     }
 
     def builders = [:]
-//    builders['MocOSX'] = get_osx_pipeline()
-    builders['Fedora'] = get_fedora_pipeline()
-    
+    builders['MocOSX'] = get_osx_pipeline()
+
     parallel builders
 
     // Delete workspace when build is done

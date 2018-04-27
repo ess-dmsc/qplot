@@ -1,12 +1,16 @@
 #include "QPlot.h"
 #include "GradientSelector.h"
 
+inline void initQPlotResources() { Q_INIT_RESOURCE(qplot); }
+
 namespace QPlot
 {
 
 GenericPlot::GenericPlot(QWidget *parent)
   : QCustomPlot(parent)
 {
+  initQPlotResources();
+
   export_menu_.addAction("png");
   export_menu_.addAction("jpg");
   export_menu_.addAction("pdf");
