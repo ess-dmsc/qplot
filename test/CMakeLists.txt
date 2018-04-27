@@ -1,4 +1,4 @@
-set(this_target ${PROJECT_NAME}_test)
+set(this_target qplot_test)
 
 ## Qt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -16,7 +16,6 @@ add_executable(
     ${${this_target}_UI}
     ${${this_target}_SOURCES}
     ${${this_target}_HEADERS}
-    ${${PROJECT_NAME}_RESOURCES}
 )
 
 target_include_directories(
@@ -26,7 +25,7 @@ target_include_directories(
 
 target_link_libraries(
     ${this_target}
-    ${PROJECT_NAME}
+    qplot
     Qt5::Widgets
     Qt5::PrintSupport
 )

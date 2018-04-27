@@ -1,4 +1,4 @@
-set(this_target ${PROJECT_NAME})
+set(this_target qplot)
 
 # Qt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -11,7 +11,7 @@ set(${this_target}_RESOURCES qplot.qrc)
 qt5_add_resources(RCC_SOURCES ${${this_target}_RESOURCES})
 
 file(GLOB_RECURSE ${this_target}_SOURCES *.cpp)
-file(GLOB_RECURSE ${this_target}_HEADERS *.h ${PROJECT_BINARY_DIR}/*.h)
+file(GLOB_RECURSE ${this_target}_HEADERS *.h)
 dirs_of(${this_target}_INCLUDE_DIRS "${${this_target}_HEADERS}")
 
 add_library(
