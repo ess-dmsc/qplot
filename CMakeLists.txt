@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 project(qplot
-        LANGUAGES CXX C
+        LANGUAGES CXX
         VERSION 0.0.1
         )
 

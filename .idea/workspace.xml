@@ -15,42 +15,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d53192bf-164c-4abd-801f-2f72dd93dfd7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestApp.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestApp.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestApp.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestPlot2D.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestPlot2D.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestPlot2D.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cmake/DirsOf.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/GradientSelector.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/GradientSelector.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/Gradients.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/Gradients.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QHist.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot1D.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot1D.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot2D.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlot2D.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotAppearance.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotAppearance.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotButton.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotButton.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotDraggable.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/QPlotDraggable.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/icons.qrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/icons/document_save.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/icons/view_fullscreen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/icons/view_statistics.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/qcustomplot/GPL.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/qcustomplot/changelog.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/qcustomplot/qcustomplot.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/qplot/qcustomplot/qcustomplot.h" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -74,20 +40,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+          <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="475">
                   <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Jenkinsfile">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1064">
-                  <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
                 </state>
               </provider>
             </entry>
@@ -131,8 +88,8 @@
           <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="437">
-                  <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+                <state relative-caret-position="38">
+                  <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
                 </state>
               </provider>
             </entry>
@@ -153,8 +110,8 @@
         <option value="$PROJECT_DIR$/source/QPlot.cpp" />
         <option value="$PROJECT_DIR$/source/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/test/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Jenkinsfile" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
       </list>
     </option>
   </component>
@@ -246,18 +203,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1524837240148</updated>
-      <workItem from="1524837241396" duration="7824000" />
+      <workItem from="1524837241396" duration="8448000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7824000" />
+    <option name="totallyTimeSpent" value="8448000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="2562" height="1416" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15039062" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="CMake" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
@@ -333,24 +290,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+    <entry file="file://$PROJECT_DIR$/Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+        <state relative-caret-position="779">
+          <caret line="41" column="13" lean-forward="true" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        <state relative-caret-position="342">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Jenkinsfile">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1064">
-          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+        <state relative-caret-position="38">
+          <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
         </state>
       </provider>
     </entry>
