@@ -39,7 +39,7 @@ def get_macos_pipeline() {
                 dir("${project}/build") {
                     try {
                         sh "ls -al "
-                        sh "CMAKE_PREFIX_PATH=/usr/local/opt/qt cmake ../code"
+                        sh "cmake ../code"
                     } catch (e) {
                         failure_function(e, 'MacOSX / CMake failed')
                     }
