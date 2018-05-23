@@ -20,6 +20,7 @@ def get_macos_pipeline() {
                 dir("${project}/code") {
                     try {
                         checkout scm
+                        sh "git submodule update --init"
                     } catch (e) {
                         failure_function(e, 'MacOSX / Checkout failed')
                     }
@@ -33,7 +34,7 @@ def get_macos_pipeline() {
                     }
 
                     try {
-                        sh "make VERBOSE=1"
+                        sh "make"
                     } catch (e) {
                         failure_function(e, 'MacOSX / build+test failed')
                     }
