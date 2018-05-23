@@ -2,9 +2,7 @@ project = "qplot"
 
 images = [
         'ubuntu18' : [
-                'name'  : 'essdmscdm/ubuntu18.04-build-node:1.1.0',
-                'sh'    : 'sh',
-                'cmake' : 'cmake'
+                'name'  : 'essdmscdm/ubuntu18.04-build-node:1.1.0'
         ]
 ]
 
@@ -72,18 +70,16 @@ def create_container(image_key) {
 }
 
 def docker_clone(image_key) {
-    def custom_sh = images[image_key]['sh']
     def clone_script = """
         git clone \
             --branch ${env.BRANCH_NAME} \
             https://github.com/ess-dmsc/${project}.git /home/jenkins/${project}
         cd ${project}
         """
-    sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${clone_script}\""
+    sh "docker exec ${container_name(image_key)} sh -c \"${clone_script}\""
 }
 
 def docker_dependencies(image_key) {
-    def custom_sh = images[image_key]['sh']
     def conan_remote = "ess-dmsc-local"
     def dependencies_script = """
         mkdir ${project}/build
@@ -92,28 +88,25 @@ def docker_dependencies(image_key) {
             --insert 0 \\
             ${conan_remote} ${local_conan_server}
                     """
-    sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${dependencies_script}\""
+    sh "docker exec ${container_name(image_key)} sh -c \"${dependencies_script}\""
 }
 
 def docker_cmake(image_key, xtra_flags) {
-    def custom_sh = images[image_key]['sh']
-    def cmake = images[image_key]['cmake']
     def configure_script = """
         cd ${project}/build
-        ${cmake} ${xtra_flags} ..
+        cmake ${xtra_flags} ..
         """
 
-    sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${configure_script}\""
+    sh "docker exec ${container_name(image_key)} sh -c \"${configure_script}\""
 }
 
 def docker_build(image_key) {
-    def custom_sh = images[image_key]['sh']
     def build_script = """
         cd ${project}/build
         . ./activate_run.sh
         make -j4
                   """
-    sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${build_script}\""
+    sh "docker exec ${container_name(image_key)} sh -c \"${build_script}\""
 }
 
 def get_pipeline(image_key) {
