@@ -38,7 +38,7 @@ def get_macos_pipeline() {
 
                 dir("${project}/build") {
                     try {
-                        sh "cmake ../code"
+                        sh "CMAKE_MODULE_PREFIX=/usr/local/opt/qt5/lib/cmake/Qt5 cmake ../code"
                     } catch (e) {
                         failure_function(e, 'MacOSX / CMake failed')
                     }
