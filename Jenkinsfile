@@ -2,7 +2,7 @@ project = "qplot"
 
 images = [
         'ubuntu18' : [
-                'name'  : 'essdmscdm/ubuntu18.04-build-node:1.0.0',
+                'name'  : 'essdmscdm/ubuntu18.04-build-node:1.1.0',
                 'sh'    : 'sh',
                 'cmake' : 'cmake'
         ]
@@ -38,7 +38,8 @@ def get_macos_pipeline() {
 
                 dir("${project}/build") {
                     try {
-                        sh "CMAKE_MODULE_PREFIX=/usr/local/opt/qt5/lib/cmake/Qt5 cmake ../code"
+                        sh "ls -al "
+                        sh "CMAKE_MODULE_PREFIX=/usr/local/opt/qt cmake ../code"
                     } catch (e) {
                         failure_function(e, 'MacOSX / CMake failed')
                     }
