@@ -30,7 +30,6 @@ def get_macos_pipeline() {
                 dir("${project}/code") {
                     try {
                         checkout scm
-                        sh "git submodule update --init"
                     } catch (e) {
                         failure_function(e, 'MacOSX / Checkout failed')
                     }
@@ -38,14 +37,13 @@ def get_macos_pipeline() {
 
                 dir("${project}/build") {
                     try {
-                        sh "ls -al "
                         sh "cmake ../code"
                     } catch (e) {
                         failure_function(e, 'MacOSX / CMake failed')
                     }
 
                     try {
-                        sh "make"
+                        sh "make -j4"
                     } catch (e) {
                         failure_function(e, 'MacOSX / build+test failed')
                     }
@@ -80,7 +78,6 @@ def docker_clone(image_key) {
             --branch ${env.BRANCH_NAME} \
             https://github.com/ess-dmsc/${project}.git /home/jenkins/${project}
         cd ${project}
-        git submodule update --init
         """
     sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${clone_script}\""
 }
@@ -103,7 +100,6 @@ def docker_cmake(image_key, xtra_flags) {
     def cmake = images[image_key]['cmake']
     def configure_script = """
         cd ${project}/build
-        ${cmake} --version
         ${cmake} ${xtra_flags} ..
         """
 
@@ -115,7 +111,6 @@ def docker_build(image_key) {
     def build_script = """
         cd ${project}/build
         . ./activate_run.sh
-        make --version
         make -j4
                   """
     sh "docker exec ${container_name(image_key)} ${custom_sh} -c \"${build_script}\""
@@ -147,7 +142,6 @@ node('docker') {
         stage('Checkout') {
             try {
                 scm_vars = checkout scm
-                sh "git submodule update --init"
             } catch (e) {
                 failure_function(e, 'Checkout failed')
             }
