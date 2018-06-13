@@ -80,6 +80,7 @@ def docker_clone(image_key) {
 
 def docker_cmake(image_key, xtra_flags) {
     def configure_script = """
+        mkdir ${project}/build
         cd ${project}/build
         cmake ${xtra_flags} ..
         """
