@@ -41,7 +41,7 @@ def get_macos_pipeline() {
                     }
 
                     try {
-                        sh "make -j4"
+                        sh "make -j4 && make qplot_test -j4"
                     } catch (e) {
                         failure_function(e, 'MacOSX / build+test failed')
                     }
@@ -65,7 +65,6 @@ def create_container(image_key) {
         --network=host \
         --env http_proxy=${env.http_proxy} \
         --env https_proxy=${env.https_proxy} \
-        --env local_conan_server=${env.local_conan_server} \
           ")
 }
 
@@ -77,18 +76,6 @@ def docker_clone(image_key) {
         cd ${project}
         """
     sh "docker exec ${container_name(image_key)} sh -c \"${clone_script}\""
-}
-
-def docker_dependencies(image_key) {
-    def conan_remote = "ess-dmsc-local"
-    def dependencies_script = """
-        mkdir ${project}/build
-        cd ${project}/build
-        conan remote add \\
-            --insert 0 \\
-            ${conan_remote} ${local_conan_server}
-                    """
-    sh "docker exec ${container_name(image_key)} sh -c \"${dependencies_script}\""
 }
 
 def docker_cmake(image_key, xtra_flags) {
@@ -104,7 +91,7 @@ def docker_build(image_key) {
     def build_script = """
         cd ${project}/build
         . ./activate_run.sh
-        make -j4
+        make -j4 && make qplot_test -j4
                   """
     sh "docker exec ${container_name(image_key)} sh -c \"${build_script}\""
 }
@@ -116,7 +103,6 @@ def get_pipeline(image_key) {
                 try {
                     create_container(image_key)
                     docker_clone(image_key)
-                    docker_dependencies(image_key)
                     docker_cmake(image_key, "")
                     docker_build(image_key)
                 } finally {

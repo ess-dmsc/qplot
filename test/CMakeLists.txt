@@ -12,7 +12,7 @@ file(GLOB ${this_target}_HEADERS *.h ${PROJECT_BINARY_DIR}/*.h)
 dirs_of(${this_target}_INCLUDE_DIRS "${${this_target}_HEADERS}")
 
 add_executable(
-    ${this_target}
+    ${this_target} EXCLUDE_FROM_ALL
     ${${this_target}_UI}
     ${${this_target}_SOURCES}
     ${${this_target}_HEADERS}
