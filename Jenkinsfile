@@ -90,7 +90,6 @@ def docker_cmake(image_key, xtra_flags) {
 def docker_build(image_key) {
     def build_script = """
         cd ${project}/build
-        . ./activate_run.sh
         make -j4 && make qplot_test -j4
                   """
     sh "docker exec ${container_name(image_key)} sh -c \"${build_script}\""
