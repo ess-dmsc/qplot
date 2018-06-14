@@ -1,5 +1,5 @@
 #include "TestPlot2D.h"
-#include "GradientSelector.h"
+#include <QPlot/GradientSelector.h>
 #include "ui_TestPlot2D.h"
 
 #include <iostream>

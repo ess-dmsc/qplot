@@ -1,16 +1,138 @@
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
-project(qplot
-        LANGUAGES CXX
-        VERSION 0.0.1
-        )
+cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
-set(EXTRA_MODULES_DIR ${CMAKE_CURRENT_LIST_DIR}/cmake)
-list(APPEND CMAKE_MODULE_PATH ${EXTRA_MODULES_DIR})
+set(QPLOT_PROJECT_NAME QPlot)
+project(${QPLOT_PROJECT_NAME} CXX)
 
-include(${EXTRA_MODULES_DIR}/OutputDirConfig.cmake)
-include(${EXTRA_MODULES_DIR}/CompilerConfig.cmake)
-include(${EXTRA_MODULES_DIR}/DirsOf.cmake)
 
-add_subdirectory(source)
+set (CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
+    ${CMAKE_CURRENT_LIST_DIR})
+
+
+include (CheckCXXCompilerFlag)
+
+include (cmake/install.cmake)
+include (cmake/qt-configuration.cmake)
+include (cmake/versioning.cmake)
+
+
+SET (${QPLOT_PROJECT_NAME}_VERSION_MAJOR 2)
+SET (${QPLOT_PROJECT_NAME}_VERSION_MINOR 0)
+SET (${QPLOT_PROJECT_NAME}_VERSION_PATCH 0)
+SET (${QPLOT_PROJECT_NAME}_VERSION "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}.${${QPLOT_PROJECT_NAME}_VERSION_MINOR}.${${QPLOT_PROJECT_NAME}_VERSION_PATCH}")
+
+
+set (QT_SUPPORTED_VERSIONS 5)
+
+select_qt (
+    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+    QT_DEFAULT_VERSION 5)
+
+set (REQUIRED_QT_COMPONENTS
+    Widgets
+    )
+find_qt (
+    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+    REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+    OPTIONAL_COMPONENTS "")
+
+# Auto generate moc files
+set(CMAKE_AUTOMOC ON)
+# Auto generate moc files
+#set(CMAKE_AUTOUIC ON)
+# Auto generate moc files
+set(CMAKE_AUTORCC ON)
+
+
+option(BUILD_SHARED_LIBS "Build the shared library" ON)
+option(BUILD_STATIC_LIBS "Build the static library" OFF)
+
+set (TARGET_NAME ${QPLOT_PROJECT_NAME})
+set (TARGET_OUTPUT_SUFFIX "-Qt${QT_VERSION}${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}")
+set (INCLUDE_PREFIX "QPlot")
+set (QPLOT_LIBRARY "${TARGET_NAME}")
+
+
+add_library (${TARGET_NAME} "")
+set_target_properties(${TARGET_NAME}
+    PROPERTIES
+    EXPORT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+
+set_target_properties (${TARGET_NAME}
+    PROPERTIES
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+    VERSION ${${QPLOT_PROJECT_NAME}_VERSION}
+    SOVERSION ${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}
+    "INTERFACE_${QPLOT_PROJECT_NAME}_MAJOR_VERSION" ${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}
+    COMPATIBLE_INTERFACE_STRING "${QPLOT_PROJECT_NAME}_MAJOR_VERSION"
+    COMPILE_DEFINITIONS QTQPLOTS_LIBRARY
+    OUTPUT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
+
+check_cxx_compiler_flag ("-Wall" Wall_FLAG_SUPPORTED)
+
+if (Wall_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+endif (Wall_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-pedantic" pedantic_FLAG_SUPPORTED)
+
+if (pedantic_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
+endif (pedantic_FLAG_SUPPORTED)
+
+check_cxx_compiler_flag ("-Wextra" Wextra_FLAG_SUPPORTED)
+
+if (Wextra_FLAG_SUPPORTED)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wextra")
+endif (Wextra_FLAG_SUPPORTED)
+
+
+set (EXPORT_HEADER "${INCLUDE_PREFIX}/QPlot_global.hpp")
+
+
+generate_versioning_information (
+    TARGET_NAME ${TARGET_NAME}
+    EXPORT_HEADER ${EXPORT_HEADER}
+    EXPORT_MACRO QCP_EXPORT
+    VERSIONED_ENTITY ${QPLOT_PROJECT_NAME}
+    INCLUDE_PREFIX ${INCLUDE_PREFIX})
+
+
+target_include_directories(${TARGET_NAME}
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:include>
+    )
+
+
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/include/${INCLUDE_PREFIX})
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/resources/${INCLUDE_PREFIX})
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/src/${INCLUDE_PREFIX})
+
+
+use_qt (
+    TARGET_NAME ${TARGET_NAME}
+    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
+    REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
+    OPTIONAL_COMPONENTS "")
+
+
+install_project (
+    PROJECT_NAME ${QPLOT_PROJECT_NAME}
+    TARGET_NAME ${TARGET_NAME}
+    TARGET_OUTPUT_SUFFIX ${TARGET_OUTPUT_SUFFIX}
+    EXPORT_HEADER ${EXPORT_HEADER}
+    INCLUDE_PREFIX ${INCLUDE_PREFIX}
+    HEADER_MATCHING_REGEX "^.*\.h$|^.*\.hpp$|^.*$"
+    VERSION_HEADER ${CMAKE_CURRENT_BINARY_DIR}/${QPLOT_PROJECT_NAME}_version.h
+    NAMESPACE "")
+
+
 add_subdirectory(test)
 

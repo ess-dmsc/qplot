@@ -2,3 +2,5 @@ Parts of this software include code modified and derived from
 "qpx-gamma", developed at the National Institute of Standards and 
 Technology and made available as public domain at:
 https://github.com/usnistgov/qpx-gamma/
+
+CMake scripts, credit to Mattia Basaglia

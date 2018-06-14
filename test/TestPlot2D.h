@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-#include "QPlot2D.h"
+#include <QPlot/QPlot2D.h>
 
 namespace Ui {
 class TestPlot2D;

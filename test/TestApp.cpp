@@ -2,11 +2,11 @@
 #include "ui_TestApp.h"
 #include <QCloseEvent>
 #include <QSettings>
-#include <QHist.h>
+#include <QPlot/QHist.h>
 
 #include "TestPlot2D.h"
 
-#include "QPlot1D.h"
+#include <QPlot/QPlot1D.h>
 
 //#include "CustomLogger.h"
 

@@ -188,7 +188,7 @@
   <customwidget>
    <class>QPlot::Plot2D</class>
    <extends>QWidget</extends>
-   <header>QPlot2D.h</header>
+   <header>QPlot/QPlot2D.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

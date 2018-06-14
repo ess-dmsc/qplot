@@ -1,0 +1,10 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/include
+
+Name: QPlot
+Description: scientific plots for Qt using qcustomplot
+Version: @QPlot_VERSION@
+Libs: -L${libdir} -l@i_target_name@@i_target_output_suffix@
+Cflags: -I${includedir}/@i_project_name@ -I${includedir}
