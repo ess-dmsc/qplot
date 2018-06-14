@@ -1,0 +1,14 @@
+#
+# as the libraries are attached to the imported target we have to add the 
+# directory where to find them according to the previous find_package call
+#
+foreach(QPlot_LIB ${QPlot_LIBRARIES})
+    get_filename_component(LIB_PATH ${QPlot_LIB} DIRECTORY)
+    link_directories(${LIB_PATH})
+endforeach()
+
+#
+# load targets 
+#
+include(${CMAKE_CURRENT_LIST_DIR}/QPlot_targets.cmake)
+

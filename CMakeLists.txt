@@ -1,109 +1,52 @@
-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0.0)
 
-set(QPLOT_PROJECT_NAME QPlot)
-project(${QPLOT_PROJECT_NAME} CXX)
-
-set(EXTRA_MODULES_DIR ${CMAKE_CURRENT_LIST_DIR}/cmake)
-set(CMAKE_MODULE_PATH
-    ${CMAKE_MODULE_PATH}
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
-    ${CMAKE_CURRENT_LIST_DIR})
-
-
-#=============================================================================
-# ensure build type first
-#=============================================================================
-include(${EXTRA_MODULES_DIR}/EnsureBuildType.cmake)
-
-include(${EXTRA_MODULES_DIR}/CompilerConfig.cmake)
-
-#include(CheckCXXCompilerFlag)
-
-include(${EXTRA_MODULES_DIR}/install.cmake)
-include(${EXTRA_MODULES_DIR}/versioning.cmake)
-
-
-set(${QPLOT_PROJECT_NAME}_VERSION_MAJOR 1)
-set(${QPLOT_PROJECT_NAME}_VERSION_MINOR 0)
-set(${QPLOT_PROJECT_NAME}_VERSION_PATCH 0)
-set(${QPLOT_PROJECT_NAME}_VERSION "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}.${${QPLOT_PROJECT_NAME}_VERSION_MINOR}.${${QPLOT_PROJECT_NAME}_VERSION_PATCH}")
-
-if(APPLE AND EXISTS /usr/local/opt/qt)
-  # Homebrew installs Qt5 (up to at least 5.9.1) in
-  # /usr/local/opt/qt, ensure it can be found by CMake since
-  # it is not in the default /usr/local prefix.
-  list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt")
-endif()
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
-
-set(TARGET_NAME ${QPLOT_PROJECT_NAME})
-set(TARGET_OUTPUT_SUFFIX "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}")
-set(INCLUDE_PREFIX "QPlot")
-set(QPLOT_LIBRARY "${TARGET_NAME}")
-
-
-add_library(${TARGET_NAME} STATIC "")
-set_target_properties(${TARGET_NAME}
-    PROPERTIES
-    EXPORT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
-
-
-set_target_properties(${TARGET_NAME}
-    PROPERTIES
-    CXX_STANDARD 11
-    CXX_STANDARD_REQUIRED ON
-    VERSION ${${QPLOT_PROJECT_NAME}_VERSION}
-    SOVERSION ${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}
-    "INTERFACE_${QPLOT_PROJECT_NAME}_MAJOR_VERSION" ${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}
-    COMPATIBLE_INTERFACE_STRING "${QPLOT_PROJECT_NAME}_MAJOR_VERSION"
-    COMPILE_DEFINITIONS QTQPLOTS_LIBRARY
-    OUTPUT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
-
-
-set(EXPORT_HEADER "${INCLUDE_PREFIX}/QPlot_global.hpp")
-
-
-generate_versioning_information(
-    TARGET_NAME ${TARGET_NAME}
-    EXPORT_HEADER ${EXPORT_HEADER}
-    EXPORT_MACRO QCP_EXPORT
-    VERSIONED_ENTITY ${QPLOT_PROJECT_NAME}
-    INCLUDE_PREFIX ${INCLUDE_PREFIX})
-
-
-target_include_directories(${TARGET_NAME}
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
-    $<INSTALL_INTERFACE:include>
+project(QPlot
+    LANGUAGES CXX
+    VERSION 0.0.1
     )
 
+#=============================================================================
+# Augment CMake with our custom scripts
+#=============================================================================
+set(EXTRA_MODULES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${EXTRA_MODULES_DIR})
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/${INCLUDE_PREFIX})
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/${INCLUDE_PREFIX})
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/${INCLUDE_PREFIX})
+#=============================================================================
+# General configuration
+#=============================================================================
 
-target_link_libraries(
-    ${TARGET_NAME}
-    Qt5::Widgets
-    Qt5::PrintSupport
-)
+include(${EXTRA_MODULES_DIR}/EnsureBuildType.cmake)
+include(${EXTRA_MODULES_DIR}/InstallConfig.cmake)
+include(${EXTRA_MODULES_DIR}/OutputDirConfig.cmake)
+include(${EXTRA_MODULES_DIR}/PackageConfig.cmake)
+include(${EXTRA_MODULES_DIR}/BuildInfo.cmake)
 
-install_project(
-    PROJECT_NAME ${QPLOT_PROJECT_NAME}
-    TARGET_NAME ${TARGET_NAME}
-    TARGET_OUTPUT_SUFFIX ${TARGET_OUTPUT_SUFFIX}
-    EXPORT_HEADER ${EXPORT_HEADER}
-    INCLUDE_PREFIX ${INCLUDE_PREFIX}
-    HEADER_MATCHING_REGEX "^.*\.h$|^.*\.hpp$|^.*$"
-#    VERSION_HEADER ${CMAKE_CURRENT_BINARY_DIR}/${QPLOT_PROJECT_NAME}_version.h
-    NAMESPACE "")
+#=============================================================================
+# compiler and library configuration
+#=============================================================================
+include(${EXTRA_MODULES_DIR}/CompilerConfig.cmake)
+include(${EXTRA_MODULES_DIR}/QtLibraryConfig.cmake)
 
-
+add_subdirectory(src)
 add_subdirectory(test)
+
+#
+# create and install the version file
+#
+write_basic_package_version_file(
+    ${PROJECT_BINARY_DIR}/${PACKAGE_VERSION_FILE_NAME}
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion)
+
+install(FILES ${PROJECT_BINARY_DIR}/${PACKAGE_VERSION_FILE_NAME}
+    DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
+    COMPONENT development)
+
+#
+# create and install the package file
+#
+configure_file("${PACKAGE_CONFIG_FILE_NAME}.in" ${PACKAGE_CONFIG_FILE_NAME} @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/${PACKAGE_CONFIG_FILE_NAME}
+    DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
+    COMPONENT development)
 
