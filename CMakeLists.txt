@@ -1,66 +1,52 @@
-cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 set(QPLOT_PROJECT_NAME QPlot)
 project(${QPLOT_PROJECT_NAME} CXX)
 
 
-set (CMAKE_MODULE_PATH
+set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
     ${CMAKE_CURRENT_LIST_DIR})
 
 
-include (CheckCXXCompilerFlag)
+include(CheckCXXCompilerFlag)
 
-include (cmake/install.cmake)
-include (cmake/qt-configuration.cmake)
-include (cmake/versioning.cmake)
-
-
-SET (${QPLOT_PROJECT_NAME}_VERSION_MAJOR 1)
-SET (${QPLOT_PROJECT_NAME}_VERSION_MINOR 0)
-SET (${QPLOT_PROJECT_NAME}_VERSION_PATCH 0)
-SET (${QPLOT_PROJECT_NAME}_VERSION "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}.${${QPLOT_PROJECT_NAME}_VERSION_MINOR}.${${QPLOT_PROJECT_NAME}_VERSION_PATCH}")
+include(cmake/install.cmake)
+include(cmake/qt-configuration.cmake)
+include(cmake/versioning.cmake)
 
 
-set (QT_SUPPORTED_VERSIONS 5)
+set(${QPLOT_PROJECT_NAME}_VERSION_MAJOR 1)
+set(${QPLOT_PROJECT_NAME}_VERSION_MINOR 0)
+set(${QPLOT_PROJECT_NAME}_VERSION_PATCH 0)
+set(${QPLOT_PROJECT_NAME}_VERSION "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}.${${QPLOT_PROJECT_NAME}_VERSION_MINOR}.${${QPLOT_PROJECT_NAME}_VERSION_PATCH}")
 
-select_qt (
-    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
-    QT_DEFAULT_VERSION 5)
-
-set (REQUIRED_QT_COMPONENTS
-    Widgets PrintSupport
-    )
-find_qt (
-    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
-    REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
-    OPTIONAL_COMPONENTS "")
-
-# Auto generate moc files
+if(APPLE AND EXISTS /usr/local/opt/qt)
+  # Homebrew installs Qt5 (up to at least 5.9.1) in
+  # /usr/local/opt/qt, ensure it can be found by CMake since
+  # it is not in the default /usr/local prefix.
+  list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt")
+endif()
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-# Auto generate moc files
-#set(CMAKE_AUTOUIC ON)
-# Auto generate moc files
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
+
+set(TARGET_NAME ${QPLOT_PROJECT_NAME})
+set(TARGET_OUTPUT_SUFFIX "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}")
+set(INCLUDE_PREFIX "QPlot")
+set(QPLOT_LIBRARY "${TARGET_NAME}")
 
 
-option(BUILD_SHARED_LIBS "Build the shared library" ON)
-option(BUILD_STATIC_LIBS "Build the static library" OFF)
-
-set (TARGET_NAME ${QPLOT_PROJECT_NAME})
-set (TARGET_OUTPUT_SUFFIX "${${QPLOT_PROJECT_NAME}_VERSION_MAJOR}")
-set (INCLUDE_PREFIX "QPlot")
-set (QPLOT_LIBRARY "${TARGET_NAME}")
-
-
-add_library (${TARGET_NAME} "")
+add_library(${TARGET_NAME} STATIC "")
 set_target_properties(${TARGET_NAME}
     PROPERTIES
     EXPORT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
 
 
-set_target_properties (${TARGET_NAME}
+set_target_properties(${TARGET_NAME}
     PROPERTIES
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED ON
@@ -71,29 +57,29 @@ set_target_properties (${TARGET_NAME}
     COMPILE_DEFINITIONS QTQPLOTS_LIBRARY
     OUTPUT_NAME "${TARGET_NAME}${TARGET_OUTPUT_SUFFIX}")
 
-check_cxx_compiler_flag ("-Wall" Wall_FLAG_SUPPORTED)
+check_cxx_compiler_flag("-Wall" Wall_FLAG_SUPPORTED)
 
-if (Wall_FLAG_SUPPORTED)
+if(Wall_FLAG_SUPPORTED)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
-endif (Wall_FLAG_SUPPORTED)
+endif(Wall_FLAG_SUPPORTED)
 
-check_cxx_compiler_flag ("-pedantic" pedantic_FLAG_SUPPORTED)
+check_cxx_compiler_flag("-pedantic" pedantic_FLAG_SUPPORTED)
 
-if (pedantic_FLAG_SUPPORTED)
+if(pedantic_FLAG_SUPPORTED)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
-endif (pedantic_FLAG_SUPPORTED)
+endif(pedantic_FLAG_SUPPORTED)
 
-check_cxx_compiler_flag ("-Wextra" Wextra_FLAG_SUPPORTED)
+check_cxx_compiler_flag("-Wextra" Wextra_FLAG_SUPPORTED)
 
-if (Wextra_FLAG_SUPPORTED)
+if(Wextra_FLAG_SUPPORTED)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wextra")
-endif (Wextra_FLAG_SUPPORTED)
+endif(Wextra_FLAG_SUPPORTED)
 
 
-set (EXPORT_HEADER "${INCLUDE_PREFIX}/QPlot_global.hpp")
+set(EXPORT_HEADER "${INCLUDE_PREFIX}/QPlot_global.hpp")
 
 
-generate_versioning_information (
+generate_versioning_information(
     TARGET_NAME ${TARGET_NAME}
     EXPORT_HEADER ${EXPORT_HEADER}
     EXPORT_MACRO QCP_EXPORT
@@ -111,19 +97,17 @@ target_include_directories(${TARGET_NAME}
     )
 
 
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/include/${INCLUDE_PREFIX})
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/resources/${INCLUDE_PREFIX})
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/src/${INCLUDE_PREFIX})
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/${INCLUDE_PREFIX})
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/${INCLUDE_PREFIX})
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/${INCLUDE_PREFIX})
 
+target_link_libraries(
+    ${TARGET_NAME}
+    Qt5::Widgets
+    Qt5::PrintSupport
+)
 
-use_qt (
-    TARGET_NAME ${TARGET_NAME}
-    QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
-    REQUIRED_COMPONENTS "${REQUIRED_QT_COMPONENTS}"
-    OPTIONAL_COMPONENTS "")
-
-
-install_project (
+install_project(
     PROJECT_NAME ${QPLOT_PROJECT_NAME}
     TARGET_NAME ${TARGET_NAME}
     TARGET_OUTPUT_SUFFIX ${TARGET_OUTPUT_SUFFIX}
