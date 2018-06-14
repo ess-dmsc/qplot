@@ -30,7 +30,7 @@ select_qt (
     QT_DEFAULT_VERSION 5)
 
 set (REQUIRED_QT_COMPONENTS
-    Widgets
+    Widgets PrintSupport
     )
 find_qt (
     QT_SUPPORTED_VERSIONS "${QT_SUPPORTED_VERSIONS}"
