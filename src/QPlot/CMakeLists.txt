@@ -8,7 +8,6 @@ set(HEADERS
     QPlotAppearance.h
     QPlotButton.h
     QPlotDraggable.h
-    qcustomplot/qcustomplot.h
     )
 
 set(SOURCES
@@ -20,8 +19,12 @@ set(SOURCES
     QPlotAppearance.cpp
     QPlotButton.cpp
     QPlotDraggable.cpp
-    qcustomplot/qcustomplot.cpp
     )
+
+install(FILES ${HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
+
+add_subdirectory(qcustomplot)
 
 set(${this_target}_RESOURCES resources/qplot.qrc)
 qt5_add_resources(RCC_SOURCES ${${this_target}_RESOURCES})
@@ -47,9 +50,6 @@ set_target_properties(QPlot
 
 target_link_libraries(QPlot
     PUBLIC Qt5::Widgets Qt5::PrintSupport)
-
-install(FILES ${HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
 
 install(TARGETS QPlot
     EXPORT qplot_targets
