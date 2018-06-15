@@ -42,7 +42,7 @@ set_target_properties(QPlot
     VERSION ${PROJECT_VERSION}
     SO_VERSION 0
     CXX_STANDARD_REQUIRED ON
-    OUTPUT_NAME QPlot
+    OUTPUT_NAME qplot
     )
 
 target_link_libraries(QPlot
@@ -52,14 +52,14 @@ install(FILES ${HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
 
 install(TARGETS QPlot
-    EXPORT QPlot_targets
+    EXPORT qplot_targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     COMPONENT runtime
     )
 
-install(EXPORT QPlot_targets
+install(EXPORT qplot_targets
     DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
     COMPONENT development)
 

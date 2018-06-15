@@ -1,0 +1,5 @@
+#
+# load targets 
+#
+include(${CMAKE_CURRENT_LIST_DIR}/qplot_targets.cmake)
+

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(QPlot
+project(qplot
     LANGUAGES CXX
     VERSION 0.0.1
     )
