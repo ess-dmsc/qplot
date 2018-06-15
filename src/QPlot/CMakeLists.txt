@@ -1,44 +1,36 @@
-set(dir ${CMAKE_CURRENT_SOURCE_DIR})
-
 set(HEADERS
-    ${dir}/Gradients.h
-    ${dir}/GradientSelector.h
-    ${dir}/QHist.h
-    ${dir}/QPlot.h
-    ${dir}/QPlot1D.h
-    ${dir}/QPlot2D.h
-    ${dir}/QPlotAppearance.h
-    ${dir}/QPlotButton.h
-    ${dir}/QPlotDraggable.h
-    ${dir}/qcustomplot/qcustomplot.h
+    Gradients.h
+    GradientSelector.h
+    QHist.h
+    QPlot.h
+    QPlot1D.h
+    QPlot2D.h
+    QPlotAppearance.h
+    QPlotButton.h
+    QPlotDraggable.h
+    qcustomplot/qcustomplot.h
     )
 
 set(SOURCES
-    ${dir}/Gradients.cpp
-    ${dir}/GradientSelector.cpp
-    ${dir}/QPlot.cpp
-    ${dir}/QPlot1D.cpp
-    ${dir}/QPlot2D.cpp
-    ${dir}/QPlotAppearance.cpp
-    ${dir}/QPlotButton.cpp
-    ${dir}/QPlotDraggable.cpp
-    ${dir}/qcustomplot/qcustomplot.cpp
+    Gradients.cpp
+    GradientSelector.cpp
+    QPlot.cpp
+    QPlot1D.cpp
+    QPlot2D.cpp
+    QPlotAppearance.cpp
+    QPlotButton.cpp
+    QPlotDraggable.cpp
+    qcustomplot/qcustomplot.cpp
     )
 
-set(${this_target}_RESOURCES ${dir}/resources/qplot.qrc)
+set(${this_target}_RESOURCES resources/qplot.qrc)
 qt5_add_resources(RCC_SOURCES ${${this_target}_RESOURCES})
-
-install(FILES ${HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
 
 add_library(QPlot STATIC
     ${HEADERS}
     ${SOURCES}
     ${RCC_SOURCES}
     )
-
-target_compile_definitions(QPlot PRIVATE DLL_BUILD)
-set(QPLOT_LINKS Qt5::Widgets Qt5::PrintSupport)
 
 target_include_directories(QPlot
     PRIVATE ${PROJECT_SOURCE_DIR}/src
@@ -54,7 +46,10 @@ set_target_properties(QPlot
     )
 
 target_link_libraries(QPlot
-    PUBLIC ${QPLOT_LINKS})
+    PUBLIC Qt5::Widgets Qt5::PrintSupport)
+
+install(FILES ${HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
 
 install(TARGETS QPlot
     EXPORT QPlot_targets

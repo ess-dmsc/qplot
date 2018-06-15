@@ -8,27 +8,27 @@ project(QPlot
 #=============================================================================
 # Augment CMake with our custom scripts
 #=============================================================================
-set(EXTRA_MODULES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-list(APPEND CMAKE_MODULE_PATH ${EXTRA_MODULES_DIR})
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 #=============================================================================
 # General configuration
 #=============================================================================
-
-include(${EXTRA_MODULES_DIR}/EnsureBuildType.cmake)
-include(${EXTRA_MODULES_DIR}/InstallConfig.cmake)
-include(${EXTRA_MODULES_DIR}/OutputDirConfig.cmake)
-include(${EXTRA_MODULES_DIR}/PackageConfig.cmake)
-include(${EXTRA_MODULES_DIR}/BuildInfo.cmake)
+include(EnsureBuildType)
+include(InstallConfig)
+include(OutputDirConfig)
+include(PackageConfig)
+include(BuildInfo)
 
 #=============================================================================
 # compiler and library configuration
 #=============================================================================
-include(${EXTRA_MODULES_DIR}/CompilerConfig.cmake)
-include(${EXTRA_MODULES_DIR}/QtLibraryConfig.cmake)
+include(CompilerConfig)
+include(QtLibraryConfig)
 
+#=============================================================================
+# source
+#=============================================================================
 add_subdirectory(src)
-add_subdirectory(test)
 
 #
 # create and install the version file
@@ -50,3 +50,7 @@ install(FILES ${PROJECT_BINARY_DIR}/${PACKAGE_CONFIG_FILE_NAME}
     DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
     COMPONENT development)
 
+#=============================================================================
+# tests
+#=============================================================================
+add_subdirectory(test)
