@@ -75,7 +75,7 @@ def docker_clone(image_key) {
             https://github.com/ess-dmsc/${project}.git /home/jenkins/${project}
         cd ${project}
         """
-    sh "docker exec ${container_name(image_key)} sh -c \"${clone_script}\""
+    sh "docker exec ${container_name(image_key)} bash -e -c \"${clone_script}\""
 }
 
 def docker_cmake(image_key, xtra_flags) {
@@ -85,7 +85,7 @@ def docker_cmake(image_key, xtra_flags) {
         cmake ${xtra_flags} ..
         """
 
-    sh "docker exec ${container_name(image_key)} sh -c \"${configure_script}\""
+    sh "docker exec ${container_name(image_key)} bash -e -c \"${configure_script}\""
 }
 
 def docker_build(image_key) {
@@ -93,7 +93,7 @@ def docker_build(image_key) {
         cd ${project}/build
         make -j4 && make qplot_test -j4
                   """
-    sh "docker exec ${container_name(image_key)} sh -c \"${build_script}\""
+    sh "docker exec ${container_name(image_key)} bash -e -c \"${build_script}\""
 }
 
 def get_pipeline(image_key) {
@@ -153,4 +153,3 @@ node('docker') {
     // Delete workspace if build was successful
     cleanWs()
 }
-
