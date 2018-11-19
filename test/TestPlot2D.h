@@ -25,7 +25,11 @@ class TestPlot2D : public QWidget
 
     void on_pushGradientSelector_clicked();
 
-  private:
+    void changedFlipY(bool);
+
+    void clickedPlot(double x, double y, Qt::MouseButton button);
+
+private:
     Ui::TestPlot2D *ui;
 
     bool user_zoomed_ {false};

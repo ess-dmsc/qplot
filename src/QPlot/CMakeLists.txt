@@ -24,6 +24,7 @@ set(SOURCES
 install(FILES ${HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/QPlot)
 
+#add_definitions(-DQCUSTOMPLOT_USE_OPENGL=1)
 add_subdirectory(qcustomplot)
 
 set(${this_target}_RESOURCES resources/qplot.qrc)

@@ -387,15 +387,13 @@ void GenericPlot::mousePressEvent(QMouseEvent *event)
 void GenericPlot::mouseMoveEvent(QMouseEvent *event)
 {
   emit mouseMove(event);
-  double co_x, co_y;
-
-  co_x = xAxis->pixelToCoord(event->x());
-  co_y = yAxis->pixelToCoord(event->y());
 
   QVariant details;
   QCPLayerable *clickedLayerable = layerableAt(event->pos(), true, &details);
   if (QCPColorMap *ap = qobject_cast<QCPColorMap*>(clickedLayerable)) {
-    int x = co_x, y = co_y;
+    double co_x = xAxis->pixelToCoord(event->x());
+    double co_y = yAxis->pixelToCoord(event->y());
+    int x{0}, y{0};
     ap->data()->coordToCell(co_x, co_y, &x, &y);
     emit mouseHover(static_cast<double>(x), static_cast<double>(y));
   } //else
@@ -421,10 +419,8 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
   emit mouseRelease(event);
 
   if ((mMousePressPos-event->pos()).manhattanLength() < 5) {
-    double co_x, co_y;
-
-    co_x = xAxis->pixelToCoord(event->x());
-    co_y = yAxis->pixelToCoord(event->y());
+    double co_x = xAxis->pixelToCoord(event->x());
+    double co_y = yAxis->pixelToCoord(event->y());
 
     QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->localPos(), false));
 
@@ -441,7 +437,7 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
       QCPLayerable *clickedLayerable = layerableAt(event->pos(), false, &details);
       if (QCPColorMap *ap = qobject_cast<QCPColorMap*>(clickedLayerable))
       {
-        int xx, yy;
+        int xx{0}, yy{0};
         ap->data()->coordToCell(co_x, co_y, &xx, &yy);
         this->mouseClicked(static_cast<double>(xx), static_cast<double>(yy), event);
       }
@@ -701,7 +697,10 @@ void GenericPlot::optionsChanged(QAction* action)
   else if (choice == "Show title")
     setShowTitle(!show_title_);
   else if (choice == "Flip Y axis")
+  {
     setFlipY(!flip_y_);
+    emit flipYChanged(flip_y_);
+  }
   else if (choice == "Antialiased")
     setAntialiased(!antialiased_);
   else if (plot_styles_.contains(choice))
