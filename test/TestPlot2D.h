@@ -25,6 +25,8 @@ class TestPlot2D : public QWidget
 
     void on_pushGradientSelector_clicked();
 
+    void changedFlipY(bool);
+
   private:
     Ui::TestPlot2D *ui;
 
