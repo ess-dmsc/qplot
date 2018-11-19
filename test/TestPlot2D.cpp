@@ -25,6 +25,8 @@ TestPlot2D::TestPlot2D(QWidget *parent)
   connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel(QWheelEvent*)));
   connect(ui->plot, SIGNAL(zoomedOut()), this, SLOT(zoomedOut()));
   connect(ui->plot, SIGNAL(flipYChanged(bool)), this, SLOT(changedFlipY(bool)));
+  connect(ui->plot, SIGNAL(clickedPlot(double, double, Qt::MouseButton)), this,
+          SLOT(clickedPlot(double, double, Qt::MouseButton)));
 
   connect(ui->checkStyle, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
   connect(ui->checkScale, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
@@ -88,7 +90,12 @@ void TestPlot2D::zoomedOut()
 
 void TestPlot2D::changedFlipY(bool)
 {
-  qDebug() << "changed flip Y = " << ui->plot->flipY() << "\n";
+  qDebug() << "changed flip Y = " << ui->plot->flipY();
+}
+
+void TestPlot2D::clickedPlot(double x, double y, Qt::MouseButton button)
+{
+  qDebug() << "Clicked on (" << x << "," << y << ")";
 }
 
 void TestPlot2D::updateShowOptions()
