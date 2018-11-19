@@ -701,7 +701,10 @@ void GenericPlot::optionsChanged(QAction* action)
   else if (choice == "Show title")
     setShowTitle(!show_title_);
   else if (choice == "Flip Y axis")
+  {
     setFlipY(!flip_y_);
+    emit flipYChanged(flip_y_);
+  }
   else if (choice == "Antialiased")
     setAntialiased(!antialiased_);
   else if (plot_styles_.contains(choice))
