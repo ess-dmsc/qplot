@@ -5,6 +5,7 @@
 #include <QPlot/QHist.h>
 
 #include "TestPlot2D.h"
+#include "TestScalar.h"
 
 #include <QPlot/QPlot1D.h>
 
@@ -16,6 +17,9 @@ TestApp::TestApp(QWidget *parent) :
 {
   //  CustomLogger::initLogger();
   ui->setupUi(this);
+
+  auto scalar = new TestScalar(this);
+  ui->tabs->addTab(scalar, "Scalar");
 
   ui->tabs->addTab(new QPlot::Multi1D(this), "Multi1D");
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Energy Calibration</string>
+   <string>Plot2D</string>
   </property>
   <property name="windowIcon">
    <iconset>
