@@ -26,12 +26,18 @@ public:
   bool override_background_ {false};
   QColor background_ {Qt::black};
 
+  Qt::Orientation orientation_ {Qt::Vertical};
+
+  int val_precision_ {-1};
+
  protected:
   QString prefix_;
   QString suffix_;
   QFont font_ {"SF Fedora Titles", 16, 2};
+  int text_margin_ {20};
   QString compose_text() const;
   int text_height() const;
+  int total_text_margin() const;
   void paint_text(QPainter *painter, const QRect &rect, int flags) const;
 
   QCPRange range_;
@@ -41,11 +47,16 @@ public:
 
   int block_size_ {10};
   int block_margin_ {2};
-  int text_margin_ {20};
   int block_size_with_margin() const;
   int block_size2() const;
   int block_size2_with_margin() const;
+  int total_blocks_width() const;
+  int total_blocks_height() const;
+  int total_block_count() const;
   QRect block() const;
+
+  QPoint initial_offset() const;
+  QPoint next_block_offset() const;
 
   QColor color_at(double) const;
   QColor min_color() const;

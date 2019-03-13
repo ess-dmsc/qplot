@@ -181,6 +181,41 @@
       <item row="4" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
+         <widget class="QLabel" name="label_5">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Val precision</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="doublePrecision">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <double>-1.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>6.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="label_4">
           <property name="minimumSize">
            <size>
@@ -208,7 +243,7 @@
            <double>0.100000000000000</double>
           </property>
           <property name="value">
-           <double>5.000000000000000</double>
+           <double>10.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -216,6 +251,85 @@
          <widget class="QCheckBox" name="checkOverrideBackground">
           <property name="text">
            <string>Override background</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QPushButton" name="pushStart">
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushStop">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Stop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sine period (ms)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="doublePeriod">
+          <property name="minimum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>50000.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>1000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Update frequency (ms)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinUpdateFrequency">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>50000</number>
+          </property>
+          <property name="singleStep">
+           <number>1</number>
           </property>
          </widget>
         </item>
@@ -237,7 +351,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="knight2" native="true"/>
+      <widget class="QPlot::KnightRiderWidget" name="knight2" native="true"/>
      </item>
     </layout>
    </item>

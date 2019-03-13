@@ -75,16 +75,16 @@ QColor interpolateHSV(const QColor& a, const QColor& b,
 
 QColor KnightRiderWidget::on_color(size_t block, size_t total_blocks) const
 {
-  double rel_pos = double(block + 1u) / double(total_blocks);
+  double rel_pos = double(block) / double(total_blocks);
   return color_at(range_.lower + rel_pos * range_.size());
 }
 
 QColor KnightRiderWidget::off_color(size_t block, size_t total_blocks) const
 {
   return interpolateHSV(min_color(), on_color(block, total_blocks),
-      1.0 - dark_block_visibility_,
-      dark_block_visibility_,
-      dark_block_visibility_);
+                        1.0 - dark_block_visibility_,
+                        dark_block_visibility_,
+                        dark_block_visibility_);
 }
 
 QColor KnightRiderWidget::frac_color(size_t block, size_t total_blocks, double frac) const
@@ -108,7 +108,9 @@ QColor KnightRiderWidget::block_color(size_t block, size_t total_blocks, double 
 
 QString KnightRiderWidget::compose_text() const
 {
-  return prefix_ + " " + QString::number(val_) + " " + suffix_;
+  return prefix_ + " " +
+      ((val_precision_ >= 0) ? QString::number(val_, 'g', val_precision_) : QString::number(val_))
+      + " " + suffix_;
 }
 
 int KnightRiderWidget::text_height() const
@@ -117,11 +119,19 @@ int KnightRiderWidget::text_height() const
   return r.height();
 }
 
-void KnightRiderWidget::paint_text(QPainter *painter, const QRect &rect, int flags) const
+int KnightRiderWidget::total_text_margin() const
 {
+  return text_margin_ + 2 * block_margin_ + text_height();
+}
+
+void KnightRiderWidget::paint_text(QPainter* painter, const QRect& rect, int flags) const
+{
+  painter->save();
+  painter->translate(0, this->height() - 2 * block_margin_ - text_height());
   painter->setPen(max_color());
   painter->setFont(font_);
   painter->drawText(rect, flags, compose_text());
+  painter->restore();
 }
 
 void KnightRiderWidget::paintEvent(QPaintEvent*)
@@ -149,9 +159,50 @@ int KnightRiderWidget::block_size2_with_margin() const
   return block_size2() + 2 * block_margin_;
 }
 
+int KnightRiderWidget::total_blocks_width() const
+{
+  return width() - 2 * block_margin_;
+}
+
+int KnightRiderWidget::total_blocks_height() const
+{
+  return height() - total_text_margin() - 2 * block_margin_;
+}
+
+int KnightRiderWidget::total_block_count() const
+{
+  if (orientation_ == Qt::Vertical)
+    return total_blocks_height() / block_size_with_margin();
+  else
+    return total_blocks_width() / block_size_with_margin();
+}
+
 QRect KnightRiderWidget::block() const
 {
-  return QRect(width() / 2 - (block_size2() / 2), block_margin_, block_size2(), block_size_);
+  if (orientation_ == Qt::Vertical)
+    return QRect(width() / 2 - (block_size2() / 2),
+                 block_margin_,
+                 block_size2(), block_size_);
+  else
+    return QRect(block_margin_,
+                 height() / 2 - (block_size2() / 2),
+                 block_size_, block_size2());
+}
+
+QPoint KnightRiderWidget::initial_offset() const
+{
+  if (orientation_ == Qt::Vertical)
+    return {0, total_blocks_height()};
+  else
+    return {0, 0};
+}
+
+QPoint KnightRiderWidget::next_block_offset() const
+{
+  if (orientation_ == Qt::Vertical)
+    return {0, -block_size_with_margin()};
+  else
+    return {block_size_with_margin(), 0};
 }
 
 void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
@@ -161,8 +212,7 @@ void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
 //  painter->setRenderHint(QPainter::Antialiasing, true);
 //  painter->setRenderHint(QPainter::TextAntialiasing, true);
 
-  int height = rect.height() - (text_margin_ + 2 * block_margin_ + text_height());
-  int total_blocks = height / block_size_with_margin();
+  int total_blocks = total_block_count();
 
   double block_val = 0;
   if (total_blocks > 0)
@@ -171,23 +221,22 @@ void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
 
   auto box = block();
 
-  painter->translate(0, this->height() - 2 * block_margin_ - text_height());
-  paint_text(painter, rect, Qt::AlignTop | Qt::AlignHCenter);
-  painter->translate(0, -text_margin_);
-
+  painter->translate(initial_offset());
   painter->setPen(Qt::NoPen);
   for (int i = 0; i < total_blocks; ++i)
   {
-    painter->translate(0, -block_size_with_margin());
-
     QColor current_color = block_color(i, total_blocks, block_val);
 
     //pen.setColor(current_color);
     //painter->setPen(pen);
     painter->setBrush(current_color);
     painter->drawRect(box);
+
+    painter->translate(next_block_offset());
   }
   painter->restore();
+
+  paint_text(painter, rect, Qt::AlignTop | Qt::AlignHCenter);
 }
 
 void KnightRiderWidget::setDarkBlockVisibility(double dbv)
