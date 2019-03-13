@@ -10,8 +10,8 @@ KnightRiderWidget::KnightRiderWidget(QWidget* parent)
 {
   QFontDatabase fdb;
 
-  int id1 = fdb.addApplicationFont(":/fonts/SF_Fedora_Titles.ttf");
-  int id2 = fdb.addApplicationFont(":/fonts/Ruben.ttf");
+//  int id1 = fdb.addApplicationFont(":/fonts/SF_Fedora_Titles.ttf");
+//  int id2 = fdb.addApplicationFont(":/fonts/Ruben.ttf");
 
 //  if (id1 == -1)
 //    INFO (":/fonts/SF_Fedora_Titles.ttf could not be loaded");
@@ -134,15 +134,24 @@ void KnightRiderWidget::paintEvent(QPaintEvent*)
   paint(&painter, rect());
 }
 
-int KnightRiderWidget::block_height_with_margin() const
+int KnightRiderWidget::block_size_with_margin() const
 {
-  return block_height_ + 2 * block_margin_;
+  return block_size_ + 2 * block_margin_;
+}
+
+int KnightRiderWidget::block_size2() const
+{
+  return block_size_ * 2.5;
+}
+
+int KnightRiderWidget::block_size2_with_margin() const
+{
+  return block_size2() + 2 * block_margin_;
 }
 
 QRect KnightRiderWidget::block() const
 {
-  int block_width = block_height_with_margin() * 2;
-  return QRect(width() / 2 - (block_width / 2), block_margin_, block_width, block_height_);
+  return QRect(width() / 2 - (block_size2() / 2), block_margin_, block_size2(), block_size_);
 }
 
 void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
@@ -152,27 +161,24 @@ void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
 //  painter->setRenderHint(QPainter::Antialiasing, true);
 //  painter->setRenderHint(QPainter::TextAntialiasing, true);
 
-  int height = rect.height() - 20 - 2 * block_margin_ - text_height();
-  int total_blocks = height / block_height_with_margin();
-
-  double block_weight = 0;
-  if (total_blocks > 0)
-    block_weight = range_.size() / static_cast<double>(total_blocks);
+  int height = rect.height() - (text_margin_ + 2 * block_margin_ + text_height());
+  int total_blocks = height / block_size_with_margin();
 
   double block_val = 0;
-  if (block_weight > 0)
-    block_val = (val_ - range_.lower) / block_weight;
+  if (total_blocks > 0)
+    block_val = static_cast<double>(total_blocks) *
+        (val_ - range_.lower) / range_.size();
 
   auto box = block();
 
   painter->translate(0, this->height() - 2 * block_margin_ - text_height());
   paint_text(painter, rect, Qt::AlignTop | Qt::AlignHCenter);
-  painter->translate(0, -20);
+  painter->translate(0, -text_margin_);
 
   painter->setPen(Qt::NoPen);
   for (int i = 0; i < total_blocks; ++i)
   {
-    painter->translate(0, -block_height_with_margin());
+    painter->translate(0, -block_size_with_margin());
 
     QColor current_color = block_color(i, total_blocks, block_val);
 
