@@ -46,7 +46,7 @@ public:
   double dark_block_visibility_ {0.1};
 
   int block_size_ {10};
-  int block_margin_ {2};
+  int block_margin_ {3};
   int block_size_with_margin() const;
   int block_size2() const;
   int block_size2_with_margin() const;

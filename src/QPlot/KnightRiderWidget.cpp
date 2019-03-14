@@ -151,7 +151,7 @@ int KnightRiderWidget::block_size_with_margin() const
 
 int KnightRiderWidget::block_size2() const
 {
-  return block_size_ * 2.5;
+  return block_size_ * 3;
 }
 
 int KnightRiderWidget::block_size2_with_margin() const
@@ -209,8 +209,8 @@ void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
 {
   painter->save();
 
-//  painter->setRenderHint(QPainter::Antialiasing, true);
-//  painter->setRenderHint(QPainter::TextAntialiasing, true);
+  painter->setRenderHint(QPainter::Antialiasing, true);
+  painter->setRenderHint(QPainter::TextAntialiasing, true);
 
   int total_blocks = total_block_count();
 
@@ -221,14 +221,17 @@ void KnightRiderWidget::paint(QPainter* painter, const QRect& rect) const
 
   auto box = block();
 
+  QPen pen;
+  pen.setJoinStyle(Qt::MiterJoin);
+  pen.setWidthF(2);
   painter->translate(initial_offset());
-  painter->setPen(Qt::NoPen);
+  //painter->setPen(Qt::NoPen);
   for (int i = 0; i < total_blocks; ++i)
   {
     QColor current_color = block_color(i, total_blocks, block_val);
 
-    //pen.setColor(current_color);
-    //painter->setPen(pen);
+    pen.setColor(current_color);
+    painter->setPen(pen);
     painter->setBrush(current_color);
     painter->drawRect(box);
 
