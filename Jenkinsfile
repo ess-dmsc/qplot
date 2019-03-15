@@ -114,9 +114,8 @@ def docker_build(image_key) {
     sh """docker exec ${container_name(image_key)} ${custom_sh} -c \"
         cd ${project}/build
         make --version
-        make all unit_tests benchmark -j4
-        cd ../utils/udpredirect
-        make
+        make -j4
+        make qplot_test -j4
     \""""
 }
 
