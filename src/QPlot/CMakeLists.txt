@@ -8,6 +8,7 @@ set(HEADERS
     QPlotAppearance.h
     QPlotButton.h
     QPlotDraggable.h
+    KnightRiderWidget.h
     )
 
 set(SOURCES
@@ -19,6 +20,7 @@ set(SOURCES
     QPlotAppearance.cpp
     QPlotButton.cpp
     QPlotDraggable.cpp
+    KnightRiderWidget.cpp
     )
 
 install(FILES ${HEADERS}

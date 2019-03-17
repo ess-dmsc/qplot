@@ -15,6 +15,9 @@ add_executable(
     TestPlot2D.cpp
     TestPlot2D.h
     TestPlot2D.ui
+    TestScalar.cpp
+    TestScalar.h
+    TestScalar.ui
 )
 
 target_include_directories(
