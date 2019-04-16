@@ -2,7 +2,7 @@ project = "qplot"
 
 images = [
     'centos7': [
-        'name': 'essdmscdm/centos7-build-node:4.3.0',
+        'name': 'screamingudder/centos7-build-node:4.3.0',
         'sh': '/usr/bin/scl enable devtoolset-6 -- /bin/bash -e',
         'cmake_flags': '-DCOV=ON'
     ],
