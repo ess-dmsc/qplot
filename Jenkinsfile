@@ -2,7 +2,7 @@ project = "qplot"
 
 images = [
     'centos7': [
-        'name': 'essdmscdm/centos7-build-node:4.2.0',
+        'name': 'essdmscdm/centos7-build-node:4.3.0',
         'sh': '/usr/bin/scl enable devtoolset-6 -- /bin/bash -e',
         'cmake_flags': '-DCOV=ON'
     ],
@@ -85,26 +85,11 @@ def docker_copy_code(image_key) {
                         \""""
 }
 
-def docker_dependencies(image_key) {
-    def conan_remote = "ess-dmsc-local"
+def docker_cmake(image_key, xtra_flags) {
     def custom_sh = images[image_key]['sh']
     sh """docker exec ${container_name(image_key)} ${custom_sh} -c \"
         mkdir ${project}/build
         cd ${project}/build
-        conan remote add \
-            --insert 0 \
-            ${conan_remote} ${local_conan_server}
-        conan install -g virtualrunenv cmake_installer/3.10.0@conan/stable
-    \""""
-}
-
-def docker_cmake(image_key, xtra_flags) {
-    def custom_sh = images[image_key]['sh']
-    sh """docker exec ${container_name(image_key)} ${custom_sh} -c \"
-        cd ${project}
-        cd build
-        . ./activate_run.sh
-        cmake --version
         cmake ${xtra_flags} ..
     \""""
 }
@@ -127,7 +112,6 @@ def get_pipeline(image_key)
                 try {
                     def container = get_container(image_key)
                     docker_copy_code(image_key)
-                    docker_dependencies(image_key)
                     docker_cmake(image_key, images[image_key]['cmake_flags'])
                     docker_build(image_key)
 
@@ -168,8 +152,7 @@ node('docker') {
         def image_key = x
         builders[image_key] = get_pipeline(image_key)
     }
-
-    builders['macOS'] = get_macos_pipeline()
+    //builders['macOS'] = get_macos_pipeline()
 
     try {
         timeout(time: 2, unit: 'HOURS') {
