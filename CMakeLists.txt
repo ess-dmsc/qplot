@@ -30,7 +30,7 @@ include(QtLibraryConfig)
 # source
 #=============================================================================
 add_subdirectory(src)
-add_subdirectory(doc)
+add_subdirectory(documentation)
 
 #
 # create and install the version file

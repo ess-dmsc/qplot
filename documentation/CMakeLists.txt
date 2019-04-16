@@ -13,7 +13,7 @@ add_custom_command(OUTPUT doxygen.stamp
                    COMMAND echo "timestamp" > doxygen.stamp
                    DEPENDS Doxyfile groups.dox mainpage.dox namespaces.dox
                            ${CMAKE_DOXYGEN_BUILD_DEPENDENCIES}
-                   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 add_custom_target(api_doc DEPENDS doxygen.stamp)
 
