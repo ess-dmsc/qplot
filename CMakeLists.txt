@@ -18,6 +18,7 @@ include(InstallConfig)
 include(OutputDirConfig)
 include(PackageConfig)
 include(BuildInfo)
+include(DoxygenUtilities)
 
 #=============================================================================
 # compiler and library configuration
@@ -29,6 +30,7 @@ include(QtLibraryConfig)
 # source
 #=============================================================================
 add_subdirectory(src)
+add_subdirectory(documentation)
 
 #
 # create and install the version file
