@@ -4,7 +4,7 @@ images = [
     'centos7': [
         'name': 'screamingudder/centos7-build-node:4.3.0',
         'sh': '/usr/bin/scl enable devtoolset-6 -- /bin/bash -e',
-        'cmake_flags': '-DCOV=ON'
+        'cmake_flags': ''
     ],
     'ubuntu1804': [
         'name': 'essdmscdm/ubuntu18.04-build-node:2.1.0',
