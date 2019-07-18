@@ -193,9 +193,12 @@ void Plot2D::plotLabels()
     if (q.vertical)
     {
       labelItem->setRotation(90);
+      using ::operator|;
       labelItem->setPositionAlignment(Qt::AlignTop | Qt::AlignRight);
-    } else
+    } else {
+      using ::operator|;
       labelItem->setPositionAlignment(Qt::AlignTop | Qt::AlignLeft);
+    }
 
     labelItem->setFont(QFont("Helvetica", 10));
     labelItem->setSelectable(q.selectable);

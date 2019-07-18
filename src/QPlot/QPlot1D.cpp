@@ -218,6 +218,7 @@ void Multi1D::plotTitle()
 {
   if (showTitle() && !title_text_.isEmpty())
   {
+    using ::operator|;
     QCPItemText *floatingText = new QCPItemText(this);
     floatingText->setPositionAlignment(Qt::AlignTop | Qt::AlignHCenter);
     floatingText->position->setType(QCPItemPosition::ptAxisRectRatio);
@@ -357,7 +358,10 @@ QCPItemText* Multi1D::addLabel(QCPItemTracer* crs, const Marker1D& marker)
   markerText->setProperty("position", crs->property("position"));
 
   markerText->position->setParentAnchor(crs->position);
-  markerText->setPositionAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+  {
+    using ::operator|;
+    markerText->setPositionAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+  }
   markerText->position->setCoords(0, -30);
   markerText->setText(QString::number(marker.pos));
   markerText->setTextAlignment(Qt::AlignCenter);
