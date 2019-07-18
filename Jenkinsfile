@@ -1,19 +1,27 @@
+@Library('ecdc-pipeline')
+import ecdcpipeline.ContainerBuildNode
+import ecdcpipeline.PipelineBuilder
+
 project = "qplot"
+clangformat_os = "debian9"
 
-images = [
-    'centos7': [
-        'name': 'screamingudder/centos7-build-node:4.3.0',
-        'sh': '/usr/bin/scl enable devtoolset-6 -- /bin/bash -e',
-        'cmake_flags': ''
-    ],
-    'ubuntu1804': [
-        'name': 'essdmscdm/ubuntu18.04-build-node:2.1.0',
-        'sh': 'bash -e',
-        'cmake_flags': ''
-    ]
+// Set number of old builds to keep.
+ properties([[
+     $class: 'BuildDiscarderProperty',
+     strategy: [
+         $class: 'LogRotator',
+         artifactDaysToKeepStr: '',
+         artifactNumToKeepStr: '10',
+         daysToKeepStr: '',
+         numToKeepStr: ''
+     ]
+ ]]);
+
+container_build_nodes = [
+  'centos7': ContainerBuildNode.getDefaultContainerBuildNode('centos7'),
+  'debian9': ContainerBuildNode.getDefaultContainerBuildNode('debian9'),
+  'ubuntu1804': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu1804')
 ]
-
-base_container_name = "${project}-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 
 def failure_function(exception_obj, failureMessage) {
     def toEmails = [[$class: 'DevelopersRecipientProvider']]
@@ -21,6 +29,59 @@ def failure_function(exception_obj, failureMessage) {
             recipientProviders: toEmails,
             subject: '${DEFAULT_SUBJECT}'
     throw exception_obj
+}
+
+pipeline_builder = new PipelineBuilder(this, container_build_nodes)
+pipeline_builder.activateEmailFailureNotifications()
+
+builders = pipeline_builder.createBuilders { container ->
+
+    pipeline_builder.stage("${container.key}: checkout") {
+        dir(pipeline_builder.project) {
+            scm_vars = checkout scm
+        }
+        // Copy source code to container
+        container.copyTo(pipeline_builder.project, pipeline_builder.project)
+    }  // stage
+
+
+    if (container.key != clangformat_os) {
+        pipeline_builder.stage("${container.key}: configure") {
+            container.sh """
+                cd ${project}
+                mkdir build
+                cd build
+                cmake --version
+                cmake ..
+            """
+        }  // stage
+
+        pipeline_builder.stage("${container.key}: build") {
+            container.sh """
+                cd ${project}/build
+                make --version
+                make -j4
+                make qplot_test -j4
+            """
+        }  // stage
+    }
+
+    if (container.key == clangformat_os) {
+        pipeline_builder.stage("${container.key}: cppcheck") {
+        try {
+                def test_output = "cppcheck.txt"
+                container.sh """
+                                cd ${project}
+                                cppcheck --enable=all --inconclusive --template="{file},{line},{severity},{id},{message}" ./ 2> ${test_output}
+                            """
+                container.copyFrom("${project}", '.')
+                sh "mv -f ./${project}/* ./"
+            } catch (e) {
+                failure_function(e, "Cppcheck step for (${container.key}) failed")
+            }
+        }  // stage
+        step([$class: 'WarningsPublisher', parserConfigurations: [[parserName: 'Cppcheck Parser', pattern: "cppcheck.txt"]]])
+    }
 }
 
 def get_macos_pipeline() {
@@ -57,76 +118,9 @@ def get_macos_pipeline() {
     }
 }
 
-
-def Object container_name(image_key) {
-    return "${base_container_name}-${image_key}"
-}
-
-def Object get_container(image_key) {
-    def image = docker.image(images[image_key]['name'])
-    def container = image.run("\
-        --name ${container_name(image_key)} \
-        --tty \
-        --env http_proxy=${env.http_proxy} \
-        --env https_proxy=${env.https_proxy} \
-        --env local_conan_server=${env.local_conan_server} \
-        ")
-    return container
-}
-
-def docker_copy_code(image_key) {
-    def custom_sh = images[image_key]['sh']
-    dir("${project}_code") {
-        checkout scm
-    }
-    sh "docker cp ${project}_code ${container_name(image_key)}:/home/jenkins/${project}"
-    sh """docker exec --user root ${container_name(image_key)} ${custom_sh} -c \"
-                        chown -R jenkins.jenkins /home/jenkins/${project}
-                        \""""
-}
-
-def docker_cmake(image_key, xtra_flags) {
-    def custom_sh = images[image_key]['sh']
-    sh """docker exec ${container_name(image_key)} ${custom_sh} -c \"
-        mkdir ${project}/build
-        cd ${project}/build
-        cmake ${xtra_flags} ..
-    \""""
-}
-
-def docker_build(image_key) {
-    def custom_sh = images[image_key]['sh']
-    sh """docker exec ${container_name(image_key)} ${custom_sh} -c \"
-        cd ${project}/build
-        make --version
-        make -j4
-        make qplot_test -j4
-    \""""
-}
-
-def get_pipeline(image_key)
-{
-    return {
-        node('docker') {
-            stage("${image_key}") {
-                try {
-                    def container = get_container(image_key)
-                    docker_copy_code(image_key)
-                    docker_cmake(image_key, images[image_key]['cmake_flags'])
-                    docker_build(image_key)
-
-                } finally {
-                    sh "docker stop ${container_name(image_key)}"
-                    sh "docker rm -f ${container_name(image_key)}"
-                    cleanWs()
-                }
-            }
-        }
-    }
-}
-
 node('docker') {
     dir("${project}_code") {
+
         stage('Checkout') {
             try {
                 scm_vars = checkout scm
@@ -137,7 +131,8 @@ node('docker') {
 
         stage("Static analysis") {
             try {
-                sh "cloc --by-file --xml --out=cloc.xml ."
+                sh "find . -name '*TestData.h' > exclude_cloc"
+                sh "cloc --exclude-list-file=exclude_cloc --by-file --xml --out=cloc.xml ."
                 sh "xsltproc jenkins/cloc2sloccount.xsl cloc.xml > sloccount.sc"
                 sloccountPublish encoding: '', pattern: ''
             } catch (e) {
@@ -146,13 +141,7 @@ node('docker') {
         }
     }
 
-    def builders = [:]
-
-    for (x in images.keySet()) {
-        def image_key = x
-        builders[image_key] = get_pipeline(image_key)
-    }
-    //builders['macOS'] = get_macos_pipeline()
+    builders['macOS'] = get_macos_pipeline()
 
     try {
         timeout(time: 2, unit: 'HOURS') {
@@ -166,3 +155,5 @@ node('docker') {
         cleanWs()
     }
 }
+
+
