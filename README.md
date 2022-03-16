@@ -3,6 +3,7 @@ A library of for scientific plotting in Qt.
 
 [![Build Status](https://jenkins.esss.dk/dm/job/ess-dmsc/job/qplot/job/master/badge/icon)](https://jenkins.esss.dk/dm/job/ess-dmsc/job/qplot/job/master/)
 
+
 Contains the following:
 
 * Simple containers for list- and map-based histograms (QHist.h)
