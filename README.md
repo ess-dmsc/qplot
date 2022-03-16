@@ -1,8 +1,8 @@
 # QPlot
-A library of for scientific plotting in Qt.
+A library of for scientific plotting with Qt Widgets / C++.
 
 [![Build Status](https://jenkins.esss.dk/dm/job/ess-dmsc/job/qplot/job/master/badge/icon)](https://jenkins.esss.dk/dm/job/ess-dmsc/job/qplot/job/master/)
-
+[![Conan package](https://img.shields.io/badge/conan-package-blue)](https://github.com/ess-dmsc/conan-qplot)
 
 Contains the following:
 
