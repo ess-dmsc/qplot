@@ -8,8 +8,8 @@ Contains the following:
 
 * Simple containers for list- and map-based histograms (QHist.h)
 * KnightRiderWidget for scalar value visualization
-![screenshot](documentation/screenshots/kr.png)
-* [qcustomplot](https://www.qcustomplot.com/) (v2.0.0)
+  <br>![screenshot](documentation/screenshots/kr.png)
+* [qcustomplot](https://www.qcustomplot.com/) (v2.1.0)
 * Convenience classes based on qcustomplot
     - QPlot1D for 1-dimensional histogram widgets
     - QPlotDraggable for selecting points and ranges in 1d plots
