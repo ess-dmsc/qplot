@@ -3,7 +3,7 @@ import ecdcpipeline.ContainerBuildNode
 import ecdcpipeline.PipelineBuilder
 
 project = "qplot"
-clangformat_os = "debian9"
+clangformat_os = "ubuntu2004"
 
 // Set number of old builds to keep.
  properties([[
