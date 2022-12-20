@@ -19,8 +19,8 @@ Contains the following:
     - GradientSelector widget with visualization for color map gradients
     <br>![screenshot](documentation/screenshots/gradient_selector.png)
 
-A conan package of the library is available on
-[bintray](https://bintray.com/ess-dmsc/conan/qplot%3Aess-dmsc).
+A conan package of the library is available on the
+[ESS Artifactory](https://artifactory.esss.lu.se/artifactory/ecdc-conan-release/).
 
 Apologies for the lack of documentation. You can build doxygen API docs with `make api_doc`,
 though there is little in terms of descriptions. The [test](test) subdirectory contains some
