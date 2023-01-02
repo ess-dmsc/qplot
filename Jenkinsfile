@@ -3,7 +3,7 @@ import ecdcpipeline.ContainerBuildNode
 import ecdcpipeline.PipelineBuilder
 
 project = "qplot"
-clangformat_os = "ubuntu2004"
+clangformat_os = "ubuntu2204"
 
 // Set number of old builds to keep.
  properties([[
@@ -18,8 +18,8 @@ clangformat_os = "ubuntu2004"
  ]]);
 
 container_build_nodes = [
-  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc8'),
-  'ubuntu2004': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2004')
+  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
+  'ubuntu2004': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
 ]
 
 def failure_function(exception_obj, failureMessage) {
