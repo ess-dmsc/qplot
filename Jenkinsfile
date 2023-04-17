@@ -19,7 +19,7 @@ clangformat_os = "ubuntu2204"
 
 container_build_nodes = [
   'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
-  'ubuntu2004': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
+  'ubuntu2204': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
 ]
 
 def failure_function(exception_obj, failureMessage) {
