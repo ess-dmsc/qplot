@@ -103,8 +103,8 @@ void Draggable::movePx(double x, double y)
 
 void Draggable::onMouseMove(QMouseEvent *event)
 {
-  pos_current_ = QPointF(event->localPos().x() + grip_delta_.x(),
-                            event->localPos().y() + grip_delta_.y());
+  pos_current_ = QPointF(event->position().x() + grip_delta_.x(), 
+                         event->position().y() + grip_delta_.y());
 }
 
 void Draggable::moveToWantedPos()
