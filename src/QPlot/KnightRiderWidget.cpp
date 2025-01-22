@@ -8,6 +8,8 @@ namespace QPlot
 KnightRiderWidget::KnightRiderWidget(QWidget* parent)
     : QWidget(parent)
 {
+  QFontDatabase fdb;
+
 //  int id1 = fdb.addApplicationFont(":/fonts/SF_Fedora_Titles.ttf");
 //  int id2 = fdb.addApplicationFont(":/fonts/Ruben.ttf");
 
@@ -135,7 +137,7 @@ void KnightRiderWidget::paint_text(QPainter* painter, const QRect& rect, int fla
 void KnightRiderWidget::paintEvent(QPaintEvent*)
 {
   QPalette pal = palette();
-  pal.setColor(QPalette::Base, min_color());
+  pal.setColor(QPalette::Background, min_color());
   setPalette(pal);
 
   QPainter painter(this);

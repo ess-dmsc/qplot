@@ -16,7 +16,7 @@ Button::Button(QCustomPlot *parentPlot,
   setPixmap(pixmap);
   setSelectable(false);
 
-  if (second_point == static_cast<int>(Qt::AlignBottom | Qt::AlignRight))
+  if (second_point == (Qt::AlignBottom | Qt::AlignRight))
   {
     bottomRight->setType(QCPItemPosition::ptAbsolute);
     bottomRight->setParentAnchor(topLeft);
