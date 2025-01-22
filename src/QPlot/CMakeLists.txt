@@ -34,7 +34,7 @@ add_doxygen_source_deps(${HEADERS})
 add_subdirectory(qcustomplot)
 
 set(${this_target}_RESOURCES resources/qplot.qrc)
-qt5_add_resources(RCC_SOURCES ${${this_target}_RESOURCES})
+qt_add_resources(RCC_SOURCES ${${this_target}_RESOURCES})
 
 add_library(QPlot STATIC
   ${HEADERS}
@@ -55,8 +55,12 @@ set_target_properties(QPlot
   OUTPUT_NAME qplot
   )
 
-target_link_libraries(QPlot
-  PUBLIC Qt5::Widgets Qt5::PrintSupport)
+target_link_libraries(
+  QPlot
+  PUBLIC Qt6::Widgets
+  PUBLIC Qt6::PrintSupport
+  PUBLiC Qt6::Core5Compat
+  )
 
 install(TARGETS QPlot
   EXPORT qplot_targets
