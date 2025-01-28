@@ -2,6 +2,7 @@
 list(APPEND CMAKE_PREFIX_PATH "$ENV{QT6_DIR}/lib/cmake")
 
 message(STATUS "Qt6 cmake directory located in: ${CMAKE_PREFIX_PATH}" )
+message(STATUS "==============================================================")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
