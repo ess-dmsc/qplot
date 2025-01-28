@@ -1,10 +1,15 @@
 set(this_target qplot_test)
 
+## OS
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
 ## Qt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-find_package(Qt6 COMPONENTS Widgets PrintSupport REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
 
 add_executable(
     ${this_target} EXCLUDE_FROM_ALL
