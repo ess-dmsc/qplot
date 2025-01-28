@@ -1,10 +1,5 @@
 set(this_target qplot_test)
 
-## OS
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
 ## Qt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
