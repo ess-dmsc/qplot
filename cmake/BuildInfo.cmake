@@ -31,4 +31,6 @@ STRING(TIMESTAMP BUILDINFO_TIMESTAMP UTC)
 	
 set(BUILDINFO_SYSTEM "${CMAKE_SYSTEM}")
 set(BUILDINFO_SYSTEM "${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "Getting build info")
+message(STATUS "==============================================================")
 
