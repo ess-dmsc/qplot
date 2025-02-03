@@ -18,7 +18,7 @@ clangformat_os = "ubuntu2204"
  ]]);
 
 container_build_nodes = [
-  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
+  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11-qt6'),
   'ubuntu2204': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
 ]
 
