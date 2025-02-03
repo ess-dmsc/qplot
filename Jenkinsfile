@@ -51,7 +51,7 @@ builders = pipeline_builder.createBuilders { container ->
                 mkdir build
                 cd build
                 cmake --version
-                cmake ..
+                CMAKE_PREFIX_PATH=/opt/Qt-6.8.2/lib/cmake cmake ..
             """
         }  // stage
 
