@@ -22,10 +22,34 @@ Contains the following:
 A conan package of the library is available on the
 [ESS Artifactory](https://artifactory.esss.lu.se/artifactory/ecdc-conan-release/).
 
-Apologies for the lack of documentation. You can build doxygen API docs with `make api_doc`,
-though there is little in terms of descriptions. The [test](test) subdirectory contains some
-interactive examples of how each widget is to be used. You can also glean examples of usage in
-the following projects that make extensive use of this library:
+### Building
+
+First make sure that the environment variable `QT6_DIR` points to the root location of you Qt6 installation.
+
+```
+export QT6_DIR=/path/to/qt6/root
+```
+
+Then run the following commands
+
+```
+git clone https://github.com/ess-dmsc/qplot.git
+
+cd qplot
+
+mkdir build
+
+cd build
+
+cmake ..
+
+make
+```
+
+### Miscelleanous
+
+You can build doxygen API docs with `make api_doc`, though there is little in terms of descriptions. The [test](test) subdirectory contains some interactive examples of how each widget is to be used. You can also glean examples of usage in the following projects that make extensive use of this library
+
 * [daquiri](https://github.com/ess-dmsc/daquiri)
 * [events-nmx-classify](https://github.com/ess-dmsc/events-nmx-classify)
 * [qpx-gamma](https://github.com/usnistgov/qpx-gamma)

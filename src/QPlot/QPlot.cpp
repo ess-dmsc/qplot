@@ -1,6 +1,8 @@
 #include <QPlot/QPlot.h>
 #include <QPlot/GradientSelector.h>
 
+#include <QRegExp>
+
 inline void initQPlotResources() { Q_INIT_RESOURCE(qplot); }
 
 namespace QPlot
@@ -374,9 +376,9 @@ void GenericPlot::mousePressEvent(QMouseEvent *event)
 {
   emit mousePress(event);
 
-  Draggable *trc = qobject_cast<Draggable*>(itemAt(event->localPos(), true));
+  Draggable *trc = qobject_cast<Draggable*>(itemAt(event->position(), true));
   if ((event->button() == Qt::LeftButton) && (trc != nullptr)) {
-    trc->startMoving(event->localPos());
+    trc->startMoving(event->position());
     return;
   }
 
@@ -391,8 +393,8 @@ void GenericPlot::mouseMoveEvent(QMouseEvent *event)
   QVariant details;
   QCPLayerable *clickedLayerable = layerableAt(event->pos(), true, &details);
   if (QCPColorMap *ap = qobject_cast<QCPColorMap*>(clickedLayerable)) {
-    double co_x = xAxis->pixelToCoord(event->x());
-    double co_y = yAxis->pixelToCoord(event->y());
+    double co_x = xAxis->pixelToCoord(event->position().x());
+    double co_y = yAxis->pixelToCoord(event->position().y());
     int x{0}, y{0};
     ap->data()->coordToCell(co_x, co_y, &x, &y);
     emit mouseHover(static_cast<double>(x), static_cast<double>(y));
@@ -400,8 +402,8 @@ void GenericPlot::mouseMoveEvent(QMouseEvent *event)
   //emit mouseHover(co_x, co_y);
 
   if (event->buttons() == Qt::NoButton) {
-    Draggable *trc = qobject_cast<Draggable*>(itemAt(event->localPos(), false));
-    Button *button = qobject_cast<Button*>(itemAt(event->localPos(), false));
+    Draggable *trc = qobject_cast<Draggable*>(itemAt(event->position(), false));
+    Button *button = qobject_cast<Button*>(itemAt(event->position(), false));
 
     if (trc && trc->visible())
       setCursor(Qt::SizeHorCursor);
@@ -419,16 +421,16 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
   emit mouseRelease(event);
 
   if ((mMousePressPos-event->pos()).manhattanLength() < 5) {
-    double co_x = xAxis->pixelToCoord(event->x());
-    double co_y = yAxis->pixelToCoord(event->y());
+    double co_x = xAxis->pixelToCoord(event->position().x());
+    double co_y = yAxis->pixelToCoord(event->position().y());
 
-    QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->localPos(), false));
+    QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->position(), false));
 
     if (Button* button = qobject_cast<Button*>(ai))
       if (button->visible())
         this->executeButton(button);
 
-    if (qobject_cast<QCPColorScale*>(layoutElementAt(event->localPos())))
+    if (qobject_cast<QCPColorScale*>(layoutElementAt(event->position())))
       selectGradient();
 
     if (!ai)

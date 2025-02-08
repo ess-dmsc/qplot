@@ -4,7 +4,7 @@ set(this_target qplot_test)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
 
 add_executable(
     ${this_target} EXCLUDE_FROM_ALL
@@ -29,7 +29,7 @@ target_include_directories(
 target_link_libraries(
     ${this_target}
     QPlot
-    Qt5::Widgets
-    Qt5::PrintSupport
+    Qt6::Widgets
+    Qt6::PrintSupport
 )
 
