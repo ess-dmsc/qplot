@@ -18,7 +18,7 @@ clangformat_os = "ubuntu2204"
  ]]);
 
 container_build_nodes = [
-  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11-qt6'),
+  'centos': ContainerBuildNode.getDefaultContainerBuildNode('centos7-gcc11'),
   'ubuntu2204': ContainerBuildNode.getDefaultContainerBuildNode('ubuntu2204')
 ]
 
@@ -51,7 +51,7 @@ builders = pipeline_builder.createBuilders { container ->
                 mkdir build
                 cd build
                 cmake --version
-                CMAKE_PREFIX_PATH=/opt/Qt-6.8.2/lib/cmake cmake ..
+                cmake ..
             """
         }  // stage
 
