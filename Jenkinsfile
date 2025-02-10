@@ -1,4 +1,4 @@
-@Library('ecdc-pipeline')
+@Library('ecdc-pipeline@mnowak/docker-login')
 import ecdcpipeline.ContainerBuildNode
 import ecdcpipeline.PipelineBuilder
 
