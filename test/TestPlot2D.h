@@ -27,7 +27,7 @@ class TestPlot2D : public QWidget
 
     void changedFlipY(bool);
 
-    void clickedPlot(double x, double y, Qt::MouseButton button);
+    void clickedPlot(double x, double y);
 
 private:
     Ui::TestPlot2D *ui;

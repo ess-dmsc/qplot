@@ -93,7 +93,7 @@ void TestPlot2D::changedFlipY(bool)
   qDebug() << "changed flip Y = " << ui->plot->flipY();
 }
 
-void TestPlot2D::clickedPlot(double x, double y, Qt::MouseButton button)
+void TestPlot2D::clickedPlot(double x, double y)
 {
   qDebug() << "Clicked on (" << x << "," << y << ")";
 }

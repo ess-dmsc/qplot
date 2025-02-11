@@ -59,7 +59,7 @@ target_link_libraries(
   QPlot
   PUBLIC Qt6::Widgets
   PUBLIC Qt6::PrintSupport
-  PUBLiC Qt6::Core5Compat
+  PUBLIC Qt6::Core5Compat
   )
 
 install(TARGETS QPlot
