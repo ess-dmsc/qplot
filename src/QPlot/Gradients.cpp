@@ -30,12 +30,12 @@ QStringList Gradients::names() const
   return gradients_.keys();
 }
 
-bool Gradients::contains(QString name) const
+bool Gradients::contains(const QString &name) const
 {
   return (gradients_.count(name) > 0);
 }
 
-QCPColorGradient Gradients::get(QString name) const
+QCPColorGradient Gradients::get(const QString &name) const
 {
   if (contains(name))
     return gradients_[name];
@@ -49,7 +49,7 @@ QCPColorGradient Gradients::get(int idx) const
   return QCPColorGradient();
 }
 
-void Gradients::remove(QString name)
+void Gradients::remove(const QString &name)
 {
   if (contains(name))
     gradients_.remove(name);
@@ -86,12 +86,12 @@ void Gradients::addStandardGradients()
   set("Spectrum2", {"#ffffff","#0000ff","#00ffff","#00ff00","#ffff00","#ff0000","#000000"});
 }
 
-void Gradients::set(QString name, QCPColorGradient gr)
+void Gradients::set(const QString &name, QCPColorGradient gr)
 {
   gradients_[name] = gr;
 }
 
-void Gradients::set(QString name, std::initializer_list<std::string> colors)
+void Gradients::set(const QString &name, std::initializer_list<std::string> colors)
 {
   QVector<QColor> cols;
   for (auto &c : colors)

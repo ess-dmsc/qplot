@@ -284,9 +284,9 @@ void Plot2D::updatePlot(int sizex, int sizey,
   replotExtras();
 }
 
-void Plot2D::setAxes(QString xlabel, double x1, double x2,
-                     QString ylabel, double y1, double y2,
-                     QString zlabel)
+void Plot2D::setAxes(const QString &xlabel, double x1, double x2,
+                     const QString &ylabel, double y1, double y2,
+                     const QString &zlabel)
 {
   for (int i=0; i < plotLayout()->elementCount(); i++)
     if (QCPColorScale *le = qobject_cast<QCPColorScale*>(plotLayout()->elementAt(i)))

@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+using namespace QPlot;
+
 TestPlot2D::TestPlot2D(QWidget *parent)
   : QWidget(parent)
   , ui(new Ui::TestPlot2D)
@@ -14,7 +16,7 @@ TestPlot2D::TestPlot2D(QWidget *parent)
 
   ui->plot->setSizePolicy(QSizePolicy::Preferred,
                        QSizePolicy::MinimumExpanding);
-  updateShowOptions(ui->plot->visibleOptions());
+  updateVisibleOptions(ui->plot->visibleOptions());
 
   QPlot::Gradients g;
   g.addStandardGradients();
@@ -22,24 +24,25 @@ TestPlot2D::TestPlot2D(QWidget *parent)
   ui->plot->setGradient("Spectrum2");
   ui->plot->setScaleType("Linear");
   ui->plot->setShowGradientLegend(true);
-  connect(ui->plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel(QWheelEvent*)));
-  connect(ui->plot, SIGNAL(zoomedOut()), this, SLOT(zoomedOut()));
-  connect(ui->plot, SIGNAL(flipYChanged(bool)), this, SLOT(changedFlipY(bool)));
-  connect(ui->plot, SIGNAL(clickedPlot(double, double, Qt::MouseButton)), this,
-          SLOT(clickedPlot(double, double, Qt::MouseButton)));
 
-  connect(ui->checkStyle, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkScale, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkLabels, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkThemes, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkThickness, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkGrid, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkTitle, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkZoom, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkSave, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkGradients, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkDither, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
-  connect(ui->checkFlipY, SIGNAL(clicked()), this, SLOT(updateShowOptions()));
+  connect(ui->plot, &Plot2D::mouseWheel, this, &TestPlot2D::mouseWheel);
+  connect(ui->plot, &Plot2D::zoomedOut, this, &TestPlot2D::zoomedOut);
+
+  connect(ui->plot, &Plot2D::flipYChanged, this, &TestPlot2D::changedFlipY);
+  connect(ui->plot, &Plot2D::clickedPlot,  this, &TestPlot2D::clickedPlot);
+
+  connect(ui->checkStyle,     &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkScale,     &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkLabels,    &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkThemes,    &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkThickness, &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkGrid,      &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkTitle,     &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkZoom,      &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkSave,      &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkGradients, &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkDither,    &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
+  connect(ui->checkFlipY,     &QCheckBox::clicked, this, &TestPlot2D::updateShowOptions);
 }
 
 void TestPlot2D::init(uint32_t nx, uint32_t ny)
@@ -77,8 +80,7 @@ void TestPlot2D::refresh()
   ui->plot->replot(QCustomPlot::rpQueuedRefresh);
 }
 
-
-void TestPlot2D::mouseWheel (QWheelEvent *event)
+void TestPlot2D::mouseWheel(QWheelEvent *event)
 {
   user_zoomed_ = true;
 }
@@ -93,7 +95,7 @@ void TestPlot2D::changedFlipY(bool)
   qDebug() << "changed flip Y = " << ui->plot->flipY();
 }
 
-void TestPlot2D::clickedPlot(double x, double y)
+void TestPlot2D::clickedPlot(double x, double y, Qt::MouseButton)
 {
   qDebug() << "Clicked on (" << x << "," << y << ")";
 }
@@ -129,7 +131,7 @@ void TestPlot2D::updateShowOptions()
   ui->plot->setVisibleOptions(opts);
 }
 
-void TestPlot2D::updateShowOptions(QPlot::ShowOptions opts)
+void TestPlot2D::updateVisibleOptions(QPlot::ShowOptions opts)
 {
   ui->checkStyle->setChecked(opts.testFlag(QPlot::style));
   ui->checkScale->setChecked(opts.testFlag(QPlot::scale));

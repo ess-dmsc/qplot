@@ -22,7 +22,7 @@ signals:
 public slots:
     void move(double x, double y, bool signalNeeded = true);
     void movePx(double x, double y);
-    void stopMov(QMouseEvent* evt);
+    void stopMove(QMouseEvent* evt);
 
 private slots:
     void onMouseMove(QMouseEvent *event);

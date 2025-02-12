@@ -29,7 +29,7 @@ Button::Button(QCustomPlot *parentPlot,
     topLeft->setCoords(-pixmap.width(), -pixmap.height());
   }
 
-  connect(parentPlot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(showTip(QMouseEvent*)));
+  connect(parentPlot, &QCustomPlot::mouseMove, this, &Button::showTip);
 }
 
 void Button::showTip(QMouseEvent *event)

@@ -42,12 +42,12 @@ Multi1D::Multi1D(QWidget *parent)
   yAxis->setPadding(28);
   setNoAntialiasingOnDrag(true);
 
-  connect(this, SIGNAL(beforeReplot()), this, SLOT(adjustY()));
-  connect(this, SIGNAL(mouseRelease(QMouseEvent*)), this, SLOT(mouseReleased(QMouseEvent*)));
-  connect(this, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePressed(QMouseEvent*)));
+  connect(this, &QCustomPlot::beforeReplot, this, &Multi1D::adjustY);
+  connect(this, &QCustomPlot::mouseRelease, this, &Multi1D::mouseReleased);
+  connect(this, &QCustomPlot::mousePress,   this, &Multi1D::mousePressed);
 
   QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Backspace), this);
-  connect(shortcut, SIGNAL(activated()), this, SLOT(zoomOut()));
+  connect(shortcut, &QShortcut::activated, this, &Multi1D::zoomOut);
 
   setScaleType("Logarithmic");
   setPlotStyle("Step center");
@@ -73,14 +73,14 @@ void Multi1D::clearExtras()
   title_text_.clear();
 }
 
-void Multi1D::setAxisLabels(QString x, QString y)
+void Multi1D::setAxisLabels(const QString &x, const QString &y)
 {
   xAxis->setLabel(x);
   yAxis->setLabel(y);
 }
 
 
-void Multi1D::setTitle(QString title)
+void Multi1D::setTitle(const QString &title)
 {
   title_text_ = title;
 }
@@ -244,12 +244,12 @@ void Multi1D::zoomOut()
 
 void Multi1D::mousePressed(QMouseEvent*)
 {
-  disconnect(this, SIGNAL(beforeReplot()), this, SLOT(adjustY()));
+  disconnect(this, &Multi1D::beforeReplot, this, &Multi1D::adjustY);
 }
 
 void Multi1D::mouseReleased(QMouseEvent*)
 {
-  connect(this, SIGNAL(beforeReplot()), this, SLOT(adjustY()));
+  connect(this, &Multi1D::beforeReplot, this, &Multi1D::adjustY);
   this->adjustY();
   replot();
 }
@@ -262,7 +262,7 @@ void Multi1D::adjustY()
     yAxis->setRange(this->getRange(xAxis->range()));
 }
 
-void Multi1D::setScaleType(QString type)
+void Multi1D::setScaleType(const QString &type)
 {
   bool diff = (type != scaleType());
   GenericPlot::setScaleType(type);
@@ -328,7 +328,7 @@ QCPItemLine* Multi1D::addArrow(QCPItemTracer* crs, const Marker1D& marker)
     return nullptr;
 
   QPen pen = marker.appearance.default_pen;
-  QPen selpen = marker.appearance.get_pen("selected");
+  QPen selpen = marker.appearance.getPen("selected");
 
   QCPItemLine *line = new QCPItemLine(this);
   line->start->setParentAnchor(crs->position);
@@ -351,7 +351,7 @@ QCPItemText* Multi1D::addLabel(QCPItemTracer* crs, const Marker1D& marker)
     return nullptr;
 
   QPen pen = marker.appearance.default_pen;
-  QPen selpen = marker.appearance.get_pen("selected");
+  QPen selpen = marker.appearance.getPen("selected");
 
   QCPItemText *markerText = new QCPItemText(this);
   markerText->setProperty("true_value", crs->graphKey());

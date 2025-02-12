@@ -3,7 +3,7 @@
 namespace QPlot
 {
 
-QPen Appearance::get_pen(QString theme) const
+QPen Appearance::getPen(const QString &theme) const
 {
   if (themes.count(theme))
     return themes[theme];

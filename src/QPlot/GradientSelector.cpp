@@ -127,8 +127,7 @@ GradientSelector::GradientSelector(Gradients gradients,
   tview->setItemDelegate(&delegate_);
   tview->setSelectionMode(QAbstractItemView::SingleSelection);
 
-  connect(tview, SIGNAL(doubleClicked(QModelIndex)),
-          this, SLOT(itemDoubleClicked(QModelIndex)));
+  connect(tview, &QListView::doubleClicked, this, &GradientSelector::itemDoubleClicked);
 
   selection_ = tview->selectionModel();
   selection_->clearSelection();

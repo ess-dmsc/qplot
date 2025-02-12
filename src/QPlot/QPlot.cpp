@@ -17,8 +17,9 @@ GenericPlot::GenericPlot(QWidget *parent)
   export_menu_.addAction("jpg");
   export_menu_.addAction("pdf");
   export_menu_.addAction("bmp");
-  connect(&export_menu_, SIGNAL(triggered(QAction*)), this, SLOT(exportPlot(QAction*)));
-  connect(&options_menu_, SIGNAL(triggered(QAction*)), this, SLOT(optionsChanged(QAction*)));
+
+  connect(&export_menu_,  &QMenu::triggered, this, &GenericPlot::exportPlot);
+  connect(&options_menu_, &QMenu::triggered, this, &GenericPlot::optionsChanged);
 }
 
 void GenericPlot::setVisibleOptions(ShowOptions options)
@@ -44,7 +45,7 @@ bool GenericPlot::containsItem(QCPAbstractItem *item) const
 }
 
 void GenericPlot::clearAll()
-{  
+{
   clearGraphs();
   clearItems();
   this->clearPrimary();
@@ -232,7 +233,7 @@ void GenericPlot::setLineThickness(uint16_t th)
     setGraphThickness(graph(i));
 }
 
-void GenericPlot::setGridStyle(QString grd)
+void GenericPlot::setGridStyle(const QString &grd)
 {
   if ((grd == "No grid") || (grd == "Grid") || (grd == "Grid + subgrid"))
   {
@@ -245,7 +246,7 @@ void GenericPlot::setGridStyle(QString grd)
   }
 }
 
-void GenericPlot::setScaleType(QString scale_type)
+void GenericPlot::setScaleType(const QString &scale_type)
 {
   if (!scale_types_.count(scale_type))
     return;
@@ -288,7 +289,7 @@ void GenericPlot::setScaleType(QString scale_type)
   this->setCursor(Qt::ArrowCursor);
 }
 
-void GenericPlot::setPlotStyle(QString stl)
+void GenericPlot::setPlotStyle(const QString &stl)
 {
   this->setCursor(Qt::WaitCursor);
   current_plot_style_ = stl;
@@ -299,7 +300,7 @@ void GenericPlot::setPlotStyle(QString stl)
   this->setCursor(Qt::ArrowCursor);
 }
 
-void GenericPlot::setGradient(QString grd)
+void GenericPlot::setGradient(const QString &grd)
 {
   if (!gradients_.contains(grd))
     return;
@@ -698,8 +699,7 @@ void GenericPlot::optionsChanged(QAction* action)
     setShowMarkerLabels(!show_marker_labels_);
   else if (choice == "Show title")
     setShowTitle(!show_title_);
-  else if (choice == "Flip Y axis")
-  {
+  else if (choice == "Flip Y axis") {
     setFlipY(!flip_y_);
     emit flipYChanged(flip_y_);
   }
@@ -860,10 +860,10 @@ QString GenericPlot::CustomSaveFileDialog(QWidget *parent,
 #endif  // Q_WS_MAC || Q_WS_WIN
 }
 
-bool GenericPlot::validateFile(QWidget* parent, QString name, bool write)
+bool GenericPlot::validateFile(QWidget* parent, const QString &path, bool write)
 {
-  QFile file(name);
-  if (name.isEmpty())
+  QFile file(path);
+  if (path.isEmpty())
     return false;
 
   if (!write)

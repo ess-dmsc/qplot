@@ -68,10 +68,10 @@ public:
   void setShowMarkerLabels(bool);
   void setShowTitle(bool);
   void setLineThickness(uint16_t);
-  void setGridStyle(QString);
-  virtual void setScaleType(QString);
-  void setPlotStyle(QString);
-  void setGradient(QString);
+  void setGridStyle(const QString&);
+  virtual void setScaleType(const QString&);
+  void setPlotStyle(const QString&);
+  void setGradient(const QString&);
 
   Gradients gradients() const;
   void setGradients(Gradients gs);
@@ -83,8 +83,8 @@ signals:
   void mouseHover(double x, double y);
   void shiftStateChanged(bool);
   void zoomedOut();
-  void scaleChanged(QString);
-  void gradientChanged(QString);
+  void scaleChanged(const QString&);
+  void gradientChanged(const QString&);
   void flipYChanged(bool);
 
 protected:
@@ -148,7 +148,7 @@ private:
                                       const QString &title,
                                       const QString &directory,
                                       const QString &filter);
-  static bool validateFile(QWidget* parent, QString, bool);
+  static bool validateFile(QWidget* parent, const QString &path, bool);
 
   void selectGradient();
 };

@@ -62,9 +62,9 @@ public:
   void updatePlot(int sizex, int sizey,
                   const HistList2D &spectrum_data);
 
-  void setAxes(QString xlabel, double x1, double x2,
-                QString ylabel, double y1, double y2,
-                QString zlabel);
+  void setAxes(const QString &xlabel, double x1, double x2,
+               const QString &ylabel, double y1, double y2,
+               const QString &zlabel);
 
   bool inRange(double x1, double x2,
                double y1, double y2) const;
