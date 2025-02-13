@@ -1,4 +1,4 @@
-@Library('ecdc-pipeline@mnowak/docker-login')
+@Library('ecdc-pipeline')
 import ecdcpipeline.ContainerBuildNode
 import ecdcpipeline.PipelineBuilder
 
@@ -156,5 +156,3 @@ node('docker') {
         cleanWs()
     }
 }
-
-
