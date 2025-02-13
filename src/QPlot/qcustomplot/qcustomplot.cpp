@@ -6827,7 +6827,11 @@ double QCPAxisTickerDateTime::dateTimeToKey(const QDateTime &dateTime)
 
   \see keyToDateTime
 */
+# if QT_VERSION > QT_VERSION_CHECK(6, 2, 0)
+double QCPAxisTickerDateTime::dateTimeToKey(const QDate &date, Qt::TimeSpec)
+# else
 double QCPAxisTickerDateTime::dateTimeToKey(const QDate &date, Qt::TimeSpec timeSpec)
+# endif
 {
 # if QT_VERSION < QT_VERSION_CHECK(4, 7, 0)
   return QDateTime(date, QTime(0, 0), timeSpec).toTime_t();
