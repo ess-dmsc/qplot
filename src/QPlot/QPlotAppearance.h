@@ -11,7 +11,7 @@ struct Appearance
   QMap<QString, QPen> themes;
   QPen default_pen {Qt::gray, 1, Qt::SolidLine};
 
-  QPen get_pen(QString theme) const;
+  QPen getPen(const QString &theme) const;
 };
 
 

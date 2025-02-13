@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
 project(qplot
     LANGUAGES CXX
-    VERSION 0.0.1
+    VERSION 0.0.2
     )
 
 #=============================================================================

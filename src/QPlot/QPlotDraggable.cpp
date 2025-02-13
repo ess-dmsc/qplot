@@ -31,7 +31,7 @@ Draggable::Draggable(QCustomPlot *parentPlot, QCPItemTracer *trc, int size)
     limit_r = parentPlot->xAxis->coordToPixel(center_tracer_->position->key() + 1);
 
   move_timer_.setInterval(25); // 40 FPS
-  connect(&move_timer_, SIGNAL(timeout()), this, SLOT(moveToWantedPos()));
+  connect(&move_timer_, &QTimer::timeout, this, &Draggable::moveToWantedPos);
 }
 
 void Draggable::set_limits(double l , double r)
@@ -43,19 +43,11 @@ void Draggable::set_limits(double l , double r)
 
 void Draggable::startMoving(const QPointF &mousePos)
 {
-//  DBG << "started moving";
+  connect(parentPlot(), &QCustomPlot::mouseMove, this, &Draggable::onMouseMove);
 
-  connect(parentPlot(), SIGNAL(mouseMove(QMouseEvent*)),
-          this, SLOT(onMouseMove(QMouseEvent*)));
-
-  if (connect(parentPlot(), SIGNAL(mouseRelease(QMouseEvent*)),
-          this, SLOT(stopMov(QMouseEvent*))))
-//    DBG << "connected successfully";
-
-
-//  DBG << "connected";
-
-  grip_delta_.setX(parentPlot()->xAxis->coordToPixel(center_tracer_->position->key()) - mousePos.x());
+  if (connect(parentPlot(), &QCustomPlot::mouseRelease, this, &Draggable::stopMove)) {
+    grip_delta_.setX(parentPlot()->xAxis->coordToPixel(center_tracer_->position->key()) - mousePos.x());
+  }
 
   pos_initial_ = center_tracer_->position->coords();
   pos_last_ = pos_initial_;
@@ -66,14 +58,11 @@ void Draggable::startMoving(const QPointF &mousePos)
 //  QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 }
 
-void Draggable::stopMov(QMouseEvent* /*evt*/)
+void Draggable::stopMove(QMouseEvent* /*evt*/)
 {
 //  DBG << "stopped moving";
-  disconnect(parentPlot(), SIGNAL(mouseMove(QMouseEvent*)),
-             this, SLOT(onMouseMove(QMouseEvent*)));
-
-  disconnect(parentPlot(), SIGNAL(mouseRelease(QMouseEvent*)),
-             this, SLOT(stopMov(QMouseEvent*)));
+  disconnect(parentPlot(), &QCustomPlot::mouseMove,    this, &Draggable::onMouseMove);
+  disconnect(parentPlot(), &QCustomPlot::mouseRelease, this, &Draggable::stopMove);
 
   move_timer_.stop();
   moveToWantedPos();
@@ -103,8 +92,8 @@ void Draggable::movePx(double x, double y)
 
 void Draggable::onMouseMove(QMouseEvent *event)
 {
-  pos_current_ = QPointF(event->localPos().x() + grip_delta_.x(),
-                            event->localPos().y() + grip_delta_.y());
+  pos_current_ = QPointF(event->position().x() + grip_delta_.x(),
+                         event->position().y() + grip_delta_.y());
 }
 
 void Draggable::moveToWantedPos()

@@ -1,6 +1,8 @@
 #include <QPlot/QPlot.h>
 #include <QPlot/GradientSelector.h>
 
+#include <QRegExp>
+
 inline void initQPlotResources() { Q_INIT_RESOURCE(qplot); }
 
 namespace QPlot
@@ -15,8 +17,9 @@ GenericPlot::GenericPlot(QWidget *parent)
   export_menu_.addAction("jpg");
   export_menu_.addAction("pdf");
   export_menu_.addAction("bmp");
-  connect(&export_menu_, SIGNAL(triggered(QAction*)), this, SLOT(exportPlot(QAction*)));
-  connect(&options_menu_, SIGNAL(triggered(QAction*)), this, SLOT(optionsChanged(QAction*)));
+
+  connect(&export_menu_,  &QMenu::triggered, this, &GenericPlot::exportPlot);
+  connect(&options_menu_, &QMenu::triggered, this, &GenericPlot::optionsChanged);
 }
 
 void GenericPlot::setVisibleOptions(ShowOptions options)
@@ -42,7 +45,7 @@ bool GenericPlot::containsItem(QCPAbstractItem *item) const
 }
 
 void GenericPlot::clearAll()
-{  
+{
   clearGraphs();
   clearItems();
   this->clearPrimary();
@@ -230,7 +233,7 @@ void GenericPlot::setLineThickness(uint16_t th)
     setGraphThickness(graph(i));
 }
 
-void GenericPlot::setGridStyle(QString grd)
+void GenericPlot::setGridStyle(const QString &grd)
 {
   if ((grd == "No grid") || (grd == "Grid") || (grd == "Grid + subgrid"))
   {
@@ -243,7 +246,7 @@ void GenericPlot::setGridStyle(QString grd)
   }
 }
 
-void GenericPlot::setScaleType(QString scale_type)
+void GenericPlot::setScaleType(const QString &scale_type)
 {
   if (!scale_types_.count(scale_type))
     return;
@@ -286,7 +289,7 @@ void GenericPlot::setScaleType(QString scale_type)
   this->setCursor(Qt::ArrowCursor);
 }
 
-void GenericPlot::setPlotStyle(QString stl)
+void GenericPlot::setPlotStyle(const QString &stl)
 {
   this->setCursor(Qt::WaitCursor);
   current_plot_style_ = stl;
@@ -297,7 +300,7 @@ void GenericPlot::setPlotStyle(QString stl)
   this->setCursor(Qt::ArrowCursor);
 }
 
-void GenericPlot::setGradient(QString grd)
+void GenericPlot::setGradient(const QString &grd)
 {
   if (!gradients_.contains(grd))
     return;
@@ -374,9 +377,9 @@ void GenericPlot::mousePressEvent(QMouseEvent *event)
 {
   emit mousePress(event);
 
-  Draggable *trc = qobject_cast<Draggable*>(itemAt(event->localPos(), true));
+  Draggable *trc = qobject_cast<Draggable*>(itemAt(event->position(), true));
   if ((event->button() == Qt::LeftButton) && (trc != nullptr)) {
-    trc->startMoving(event->localPos());
+    trc->startMoving(event->position());
     return;
   }
 
@@ -391,8 +394,8 @@ void GenericPlot::mouseMoveEvent(QMouseEvent *event)
   QVariant details;
   QCPLayerable *clickedLayerable = layerableAt(event->pos(), true, &details);
   if (QCPColorMap *ap = qobject_cast<QCPColorMap*>(clickedLayerable)) {
-    double co_x = xAxis->pixelToCoord(event->x());
-    double co_y = yAxis->pixelToCoord(event->y());
+    double co_x = xAxis->pixelToCoord(event->position().x());
+    double co_y = yAxis->pixelToCoord(event->position().y());
     int x{0}, y{0};
     ap->data()->coordToCell(co_x, co_y, &x, &y);
     emit mouseHover(static_cast<double>(x), static_cast<double>(y));
@@ -400,8 +403,8 @@ void GenericPlot::mouseMoveEvent(QMouseEvent *event)
   //emit mouseHover(co_x, co_y);
 
   if (event->buttons() == Qt::NoButton) {
-    Draggable *trc = qobject_cast<Draggable*>(itemAt(event->localPos(), false));
-    Button *button = qobject_cast<Button*>(itemAt(event->localPos(), false));
+    Draggable *trc = qobject_cast<Draggable*>(itemAt(event->position(), false));
+    Button *button = qobject_cast<Button*>(itemAt(event->position(), false));
 
     if (trc && trc->visible())
       setCursor(Qt::SizeHorCursor);
@@ -419,16 +422,16 @@ void GenericPlot::mouseReleaseEvent(QMouseEvent *event)
   emit mouseRelease(event);
 
   if ((mMousePressPos-event->pos()).manhattanLength() < 5) {
-    double co_x = xAxis->pixelToCoord(event->x());
-    double co_y = yAxis->pixelToCoord(event->y());
+    double co_x = xAxis->pixelToCoord(event->position().x());
+    double co_y = yAxis->pixelToCoord(event->position().y());
 
-    QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->localPos(), false));
+    QCPAbstractItem *ai = qobject_cast<QCPAbstractItem*>(itemAt(event->position(), false));
 
     if (Button* button = qobject_cast<Button*>(ai))
       if (button->visible())
         this->executeButton(button);
 
-    if (qobject_cast<QCPColorScale*>(layoutElementAt(event->localPos())))
+    if (qobject_cast<QCPColorScale*>(layoutElementAt(event->position())))
       selectGradient();
 
     if (!ai)
@@ -696,8 +699,7 @@ void GenericPlot::optionsChanged(QAction* action)
     setShowMarkerLabels(!show_marker_labels_);
   else if (choice == "Show title")
     setShowTitle(!show_title_);
-  else if (choice == "Flip Y axis")
-  {
+  else if (choice == "Flip Y axis") {
     setFlipY(!flip_y_);
     emit flipYChanged(flip_y_);
   }
@@ -858,10 +860,10 @@ QString GenericPlot::CustomSaveFileDialog(QWidget *parent,
 #endif  // Q_WS_MAC || Q_WS_WIN
 }
 
-bool GenericPlot::validateFile(QWidget* parent, QString name, bool write)
+bool GenericPlot::validateFile(QWidget* parent, const QString &path, bool write)
 {
-  QFile file(name);
-  if (name.isEmpty())
+  QFile file(path);
+  if (path.isEmpty())
     return false;
 
   if (!write)

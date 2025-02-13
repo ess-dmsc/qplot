@@ -16,7 +16,7 @@ Button::Button(QCustomPlot *parentPlot,
   setPixmap(pixmap);
   setSelectable(false);
 
-  if (second_point == (Qt::AlignBottom | Qt::AlignRight))
+  if (second_point == static_cast<int>(Qt::AlignBottom | Qt::AlignRight))
   {
     bottomRight->setType(QCPItemPosition::ptAbsolute);
     bottomRight->setParentAnchor(topLeft);
@@ -29,7 +29,7 @@ Button::Button(QCustomPlot *parentPlot,
     topLeft->setCoords(-pixmap.width(), -pixmap.height());
   }
 
-  connect(parentPlot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(showTip(QMouseEvent*)));
+  connect(parentPlot, &QCustomPlot::mouseMove, this, &Button::showTip);
 }
 
 void Button::showTip(QMouseEvent *event)

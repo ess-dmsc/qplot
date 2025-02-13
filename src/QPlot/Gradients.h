@@ -16,14 +16,14 @@ class Gradients
     void clear();
 
     QStringList names() const;
-    bool contains(QString name) const;
-    QCPColorGradient get(QString name) const;
+    bool contains(const QString &name) const;
+    QCPColorGradient get(const QString &name) const;
     QCPColorGradient get(int idx) const;
 
-    void remove(QString name);
+    void remove(const QString &name);
     void addStandardGradients();
-    void set(QString name, QCPColorGradient gr);
-    void set(QString name, std::initializer_list<std::string> colors);
+    void set(const QString &name, QCPColorGradient gr);
+    void set(const QString &name, std::initializer_list<std::string> colors);
 
   private:
     QMap<QString, QCPColorGradient> gradients_;

@@ -39,19 +39,19 @@ public:
   void replotExtras() override;
 
   template<typename T> QCPGraph*
-  addGraph(const T& hist, const QPen&, QString name = "");
+  addGraph(const T& hist, const QPen&, const QString &name = "");
   template<typename T> QCPGraph*
-  addGraph(const T& x, const T& y, const QPen&, QString name = "");
+  addGraph(const T& x, const T& y, const QPen&, const QString &name = "");
 
-  void setAxisLabels(QString x, QString y);
-  void setTitle(QString title);
+  void setAxisLabels(const QString &x, const QString &y);
+  void setTitle(const QString &title);
 
   void setMarkers(const QList<Marker1D> &);
   QSet<double> selectedMarkers() const;
   void setHighlight(Marker1D, Marker1D);
 
   void tightenX();
-  void setScaleType(QString) override;
+  void setScaleType(const QString&) override;
 
   virtual QCPRange getDomain();
   virtual QCPRange getRange(QCPRange domain = QCPRange());
@@ -86,7 +86,7 @@ protected:
 };
 
 template<typename T>
-QCPGraph* Multi1D::addGraph(const T& hist, const QPen& pen, QString name)
+QCPGraph* Multi1D::addGraph(const T& hist, const QPen& pen, const QString &name)
 {
   if (hist.empty())
     return nullptr; // is this wise?
@@ -117,7 +117,7 @@ QCPGraph* Multi1D::addGraph(const T& hist, const QPen& pen, QString name)
 }
 
 template<typename T>
-QCPGraph* Multi1D::addGraph(const T& x, const T& y, const QPen& pen, QString name)
+QCPGraph* Multi1D::addGraph(const T& x, const T& y, const QPen& pen, const QString &name)
 {
   if (x.empty() || y.empty() || (x.size() != y.size()))
     return nullptr; // is this wise?

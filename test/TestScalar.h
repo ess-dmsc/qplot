@@ -4,6 +4,8 @@
 #include <QPlot/GradientSelector.h>
 #include <QThread>
 #include <QMutex>
+#include <QElapsedTimer>
+
 #include <atomic>
 
 namespace Ui
@@ -51,14 +53,13 @@ class OscillatorThread : public QThread
 
  protected:
   void run() {
-    QTime myTimer;
+    QElapsedTimer myTimer;
     myTimer.start();
 
     while (!terminating_.load())
     {
       int nMilliseconds = myTimer.elapsed();
       double periods = double(nMilliseconds) / period_;
-      double remainder = periods - std::floor(periods);
       double sinval = std::sin(periods * M_2_PI);
       double val = (max_ - min_) * (1. + sinval) / 2. + min_;
       emit val_update(val);

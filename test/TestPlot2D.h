@@ -27,12 +27,12 @@ class TestPlot2D : public QWidget
 
     void changedFlipY(bool);
 
-    void clickedPlot(double x, double y, Qt::MouseButton button);
+    void clickedPlot(double x, double y, Qt::MouseButton);
 
 private:
     Ui::TestPlot2D *ui;
 
     bool user_zoomed_ {false};
 
-    void updateShowOptions(QPlot::ShowOptions opts);
+    void updateVisibleOptions(QPlot::ShowOptions opts);
 };
